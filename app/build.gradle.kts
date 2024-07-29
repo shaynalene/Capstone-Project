@@ -45,4 +45,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation ("org.apache.commons:commons-csv:1.8")
+    implementation ("org.apache.opennlp:opennlp-tools:1.9.3")
+
 }

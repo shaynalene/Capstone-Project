@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="match_parent"
+        android:layout_height="184dp"
+        android:contentDescription="@string/item_image_desc"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Food Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/item_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category, Taste"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Price"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/button_add_to_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/mcdo"
+        android:textColor="@android:color/black"
+        android:padding="10dp"
+        android:text="Add to Cart"
+        android:layout_marginTop="8dp" />
+
+
+</LinearLayout>

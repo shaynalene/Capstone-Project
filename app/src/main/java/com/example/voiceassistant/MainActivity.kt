@@ -1,6 +1,7 @@
 package com.example.voiceassistant
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -14,7 +15,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.text.SimpleDateFormat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
+import opennlp.tools.tokenize.SimpleTokenizer
+import java.io.InputStreamReader
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +32,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var tts: TextToSpeech
 
+    private lateinit var menuItems: List<MenuItem>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var menuAdapter: MenuAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,6 +43,17 @@ class MainActivity : AppCompatActivity() {
         btnSpeak = findViewById(R.id.btnSpeak)
         tvResult = findViewById(R.id.tvResult)
         tvSpeechInput = findViewById(R.id.tvSpeechInput)
+        recyclerView = findViewById(R.id.recyclerView)
+
+        // Initialize RecyclerView
+        //recyclerView.layoutManager = LinearLayoutManager(this)
+        //recyclerView.layoutManager = GridLayoutManager(this, 2)
+
+        // Initialize RecyclerView with an empty list
+        menuAdapter = MenuAdapter(emptyList()) { menuItem ->
+            addToCart(menuItem)
+        }
+        recyclerView.adapter = menuAdapter
 
         // Initialize SpeechRecognizer
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
@@ -47,6 +69,9 @@ class MainActivity : AppCompatActivity() {
                 Log.e(TAG, "Initialization failed")
             }
         }
+
+        // Load menu items
+        menuItems = loadMenuItems(this)
 
         btnSpeak.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -105,6 +130,12 @@ class MainActivity : AppCompatActivity() {
                 // Optional: Handle events related to recognition
             }
         })
+
+        // Initialize menuAdapter and set it to recyclerView
+        menuAdapter = MenuAdapter(menuItems) { menuItem ->
+            addToCart(menuItem)
+        }
+        recyclerView.adapter = menuAdapter
     }
 
     private fun startVoiceRecognition() {
@@ -116,19 +147,72 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleVoiceCommand(command: String) {
-        val response = when {
-            command.contains("hello", ignoreCase = true) -> "Hello! How can I assist you?"
-            command.contains("time", ignoreCase = true) -> {
-                val currentTime = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
-                "The current time is $currentTime"
+        Log.d(TAG, "Voice command received: $command")
+
+        // Normalize the command for exact matching
+        val normalizedCommand = command.trim().toLowerCase()
+        Log.d(TAG, "Normalized command: $normalizedCommand")
+
+        val response: String
+        val itemsToDisplay: List<MenuItem>
+
+        if (normalizedCommand.contains("best seller", ignoreCase = true)) {
+            Log.d(TAG, "Processing best seller command")
+            val bestSellers = getBestSellers(menuItems)
+            if (bestSellers.isNotEmpty()) {
+                itemsToDisplay = bestSellers
+                response = "Here are the best sellers."
+            } else {
+                response = "No best sellers available."
+                itemsToDisplay = emptyList()
             }
-            command.contains("weather", ignoreCase = true) -> "The weather today is sunny."
-            else -> "Sorry, I didn't understand that."
+        } else if (normalizedCommand.contains("recommend", ignoreCase = true) ||
+            normalizedCommand.contains("want", ignoreCase = true) ||
+            normalizedCommand.contains("give", ignoreCase = true) ||
+            normalizedCommand.contains("suggest", ignoreCase = true)) {
+            Log.d(TAG, "Processing recommendation command")
+            val (category, taste) = extractFeatures(normalizedCommand)
+            Log.d(TAG, "Extracted category: $category, taste: $taste")
+            if (category == null && taste == null) {
+                response = "Sorry, that is not on our menu."
+                itemsToDisplay = emptyList()
+            } else {
+                val recommendations = recommendItems(menuItems, category, taste)
+                if (recommendations.isNotEmpty()) {
+                    itemsToDisplay = recommendations
+                    response = "Here are some recommendations."
+                } else {
+                    response = "No recommendations available."
+                    itemsToDisplay = emptyList()
+                }
+            }
+        } else if (normalizedCommand.contains("hello", ignoreCase = true)) {
+            response = "Hello! How can I assist you?"
+            itemsToDisplay = emptyList()
+        } else {
+            response = "Sorry, I didn't understand that."
+            itemsToDisplay = emptyList()
         }
 
         // Display response in TextView and optionally speak it out loud
         tvResult.text = response
-        speak(response)
+        if (response.isNotEmpty()) speak(response)
+
+        // Update the RecyclerView with the items to display
+        menuAdapter = MenuAdapter(itemsToDisplay) { menuItem ->
+            addToCart(menuItem)
+        }
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        recyclerView.adapter = menuAdapter
+    }
+
+
+
+    private fun addToCart(menuItem: MenuItem) {
+        // Implement your logic to add the item to the cart
+        // For example, you could add it to a list and update the UI accordingly
+        // This is just a placeholder implementation
+        println("Added ${menuItem.foodName} to cart")
     }
 
     private fun speak(text: String) {
@@ -166,9 +250,103 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadMenuItems(context: Context): List<MenuItem> {
+        val inputStream = context.assets.open("mcdelivery_menu.csv")
+        val reader = InputStreamReader(inputStream)
+        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
+
+        // Log headers
+        val headers = csvParser.headerMap.keys
+        Log.d(TAG, "CSV Headers: $headers")
+
+        val menuItems = mutableListOf<MenuItem>()
+
+        for (record in csvParser) {
+            val foodName = record.get("food_name")
+            val category = record.get("category")
+            val taste = record.get("taste")
+            val price = record.get("price").toDouble()
+
+            Log.d(TAG, "Loaded item: Name=$foodName, Category=$category, Taste=$taste, Price=$price")
+
+            menuItems.add(MenuItem(foodName, category, taste, price))
+        }
+
+        csvParser.close()
+        reader.close()
+
+        return menuItems
+    }
+
+    private fun recommendItems(items: List<MenuItem>, category: String?, taste: String?): List<MenuItem> {
+        return if (category == null && taste == null) {
+            emptyList() // Return an empty list if no meaningful criteria are provided
+        } else {
+            items.filter {
+                (category == null || it.category.equals(category, ignoreCase = true)) &&
+                        (taste == null || it.taste.equals(taste, ignoreCase = true))
+            }
+        }
+    }
+
+    private fun getBestSellers(items: List<MenuItem>): List<MenuItem> {
+        return items.filter { it.category.equals("best seller", ignoreCase = true) }
+    }
+
+    private fun tokenizeText(text: String): List<String> {
+        val tokenizer = SimpleTokenizer.INSTANCE
+        val stopWords = setOf("i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now")
+
+        val tokens = tokenizer.tokenize(text.toLowerCase())
+        Log.d(TAG, "Raw tokens: $tokens")
+        val filteredTokens = tokens.filter { it.isNotEmpty() && it !in stopWords }
+        Log.d(TAG, "Filtered tokens: $filteredTokens")
+
+        return filteredTokens
+    }
+
+    private fun extractFeatures(userInput: String): Pair<String?, String?> {
+        val tokens = tokenizeText(userInput)
+
+        val categoryMapping = mapOf(
+            "burgers" to "burger",
+            "burger" to "burger",
+            "side" to "sides",
+            "pasta" to "pasta",
+            "dessert" to "dessert",
+            "desserts" to "dessert",
+            "beverage" to "beverages",
+            "drinks" to "drinks",
+            "drink" to "drinks",
+            "chickens"  to "chicken",
+            "chicken" to "chicken"
+        )
+
+        val tastes = listOf("savory", "salty", "sweet", "bitter")
+
+        var category: String? = null
+        var taste: String? = null
+
+        for (token in tokens) {
+            category = categoryMapping[token] ?: category
+            taste = if (token in tastes) token else taste
+        }
+
+        Log.d(TAG, "Extracted tokens: $tokens")
+        Log.d(TAG, "Determined category: $category, taste: $taste")
+
+        return Pair(category, taste)
+    }
+
+    data class MenuItem(
+        val foodName: String,
+        val category: String,
+        val taste: String,
+        val price: Double
+    )
+
     companion object {
         private const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_RECORD_AUDIO = 1
     }
 }
-

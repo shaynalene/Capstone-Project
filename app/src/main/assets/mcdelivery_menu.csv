@@ -1,0 +1,17 @@
+food_name,category,taste,price,popularity
+McBurger,Burger,Salty,143,4.4
+Cheeseburger,Burger,Salty,99,4.2
+Big Mac,Burger,Salty,271,4
+McCrispy Chicken Sandwich,Burger,Salty,160,4
+McFlurry,Dessert,Sweet,66,4.5
+Hot Fudge Sundae,Dessert,Sweet,55,4.5
+Hot Caramel Sundae,Dessert,Sweet,55,4
+Apple Pie,Dessert,Sweet,43,4.3
+Coke McFloat,Drinks,Sweet,79,4.2
+Coke,Drinks,Sweet,75,4.4
+Coke Zero,Drinks,Sweet,75,4.4
+Sprite,Drinks,Sweet,75,4.3
+Orange Juice,Drinks,Sweet,82,4.3
+Iced Tea,Drinks,Sweet,82,4.2
+Apple Juice,Drinks,Sweet,82,4.3
+Fried Chicken,Chicken,Salty,109,4.1

@@ -62,6 +62,15 @@ class MainActivity : AppCompatActivity() {
         @SerialName("price") val price: Double
     )
 
+    @Serializable
+    data class CartItem(
+        @SerialName("food_name") val foodName: String,
+        @SerialName("category") val category: String,
+        @SerialName("taste") val taste: String,
+        @SerialName("price") val price: Double,
+        @SerialName("quantity") val quantity: Int
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -236,10 +245,30 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun addToCart(menuItem: MenuItem) {
-        // Implement your logic to add the item to the cart
-        // For example, you could add it to a list and update the UI accordingly
-        // This is just a placeholder implementation
-        println("Added ${menuItem.foodName} to cart")
+        Log.d(TAG, "Data being inserted: hello")
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // val userId = "some_user_id" // Ensure this is valid
+
+                val cartItem = CartItem(
+                    foodName = menuItem.foodName,
+                    category = menuItem.category,
+                    taste = menuItem.taste,
+                    price = menuItem.price,
+                    quantity = 1
+                )
+
+                Log.d(TAG, "Data being inserted: $cartItem")
+
+                // val response = supabase.postgrest.from("cart").insert(data).execute()
+                val result = supabase.postgrest.from("cart").insert(cartItem)
+                Log.d(TAG, "Supabase query result: $result")
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception in addToCart", e)
+                // Handle exception (e.g., show user feedback)
+            }
+        }
     }
 
     private fun speak(text: String) {

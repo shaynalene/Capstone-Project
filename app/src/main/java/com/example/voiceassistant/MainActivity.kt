@@ -18,11 +18,21 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.github.jan.supabase.createSupabaseClient
+import kotlinx.serialization.Serializable
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import opennlp.tools.tokenize.SimpleTokenizer
 import java.io.InputStreamReader
 import java.util.*
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,9 +42,26 @@ class MainActivity : AppCompatActivity() {
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var tts: TextToSpeech
 
-    private lateinit var menuItems: List<MenuItem>
+    private var menuItems: List<MenuItem> = emptyList() // Initialize with an empty list
+    //private lateinit var menuItems: List<MenuItem>
     private lateinit var recyclerView: RecyclerView
     private lateinit var menuAdapter: MenuAdapter
+
+    val supabase = createSupabaseClient(
+        supabaseUrl = "https://uwhuzbxzexkldttxxeee.supabase.co",
+        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3aHV6Ynh6ZXhrbGR0dHh4ZWVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIzNDQ0OTUsImV4cCI6MjAzNzkyMDQ5NX0.vIlTT6qLZkwjd3FY0sCx8UKzkHlsxjPXykv5Xy63vQw"
+    ) {
+        install(Postgrest)
+    }
+
+    @Serializable
+    data class MenuItem(
+        @SerialName("food_name") val foodName: String,
+        @SerialName("category") val category: String,
+        @SerialName("taste") val taste: String,
+        @SerialName("price") val price: Double
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +97,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Load menu items
-        menuItems = loadMenuItems(this)
+        // Load menu items from Supabase
+        loadMenuItems()
 
         btnSpeak.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -250,6 +277,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
     private fun loadMenuItems(context: Context): List<MenuItem> {
         val inputStream = context.assets.open("mcdelivery_menu.csv")
         val reader = InputStreamReader(inputStream)
@@ -277,6 +305,34 @@ class MainActivity : AppCompatActivity() {
 
         return menuItems
     }
+    */
+
+
+
+    private fun loadMenuItems() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val result = supabase.postgrest.from("mcdo_menu").select()
+                Log.d(TAG, "Supabase query result: $result")
+
+                val items = result.decodeList<MenuItem>()
+                Log.d(TAG, "Decoded items: $items")
+
+                withContext(Dispatchers.Main) {
+                    menuItems = items
+                    menuAdapter = MenuAdapter(menuItems) { menuItem ->
+                        addToCart(menuItem)
+                    }
+                    recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
+                    recyclerView.adapter = menuAdapter
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading menu items", e)
+            }
+        }
+    }
+
+
 
     private fun recommendItems(items: List<MenuItem>, category: String?, taste: String?): List<MenuItem> {
         return if (category == null && taste == null) {
@@ -338,12 +394,7 @@ class MainActivity : AppCompatActivity() {
         return Pair(category, taste)
     }
 
-    data class MenuItem(
-        val foodName: String,
-        val category: String,
-        val taste: String,
-        val price: Double
-    )
+
 
     companion object {
         private const val TAG = "MainActivity"

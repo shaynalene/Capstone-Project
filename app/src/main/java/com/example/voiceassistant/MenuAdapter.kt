@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
 
 class MenuAdapter(
-    private val items: List<MainActivity.MenuItem>,
-    private val onAddToCartClick: (MainActivity.MenuItem) -> Unit // Add this callback
+    private var items: List<MainActivity.MenuItem>, // Change to var to allow updates
+    private val onAddToCartClick: (MainActivity.MenuItem) -> Unit // Callback
 ) : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
@@ -46,11 +46,17 @@ class MenuAdapter(
 
     override fun getItemCount(): Int = items.size
 
+    // Add this method to update the list of items
+    fun updateItems(newItems: List<MainActivity.MenuItem>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
+
     class MenuViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val itemImage: ImageView = view.findViewById(R.id.item_image)
         val itemName: TextView = view.findViewById(R.id.item_name)
         val itemDetails: TextView = view.findViewById(R.id.item_details)
         val itemPrice: TextView = view.findViewById(R.id.item_price)
-        val buttonAddToCart: Button = view.findViewById(R.id.button_add_to_cart) // Reference to the button
+        val buttonAddToCart: Button = view.findViewById(R.id.button_add_to_cart)
     }
 }

@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvSpeechInput: TextView
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var tts: TextToSpeech
+    private lateinit var btnViewCart: Button // Declare the button
 
     private var menuItems: List<MenuItem> = emptyList() // Initialize with an empty list
     //private lateinit var menuItems: List<MenuItem>
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         tvResult = findViewById(R.id.tvResult)
         tvSpeechInput = findViewById(R.id.tvSpeechInput)
         recyclerView = findViewById(R.id.recyclerView)
+        btnViewCart = findViewById(R.id.btnViewCart) // Initialize the button
 
         // Initialize RecyclerView
         //recyclerView.layoutManager = LinearLayoutManager(this)
@@ -166,6 +168,10 @@ class MainActivity : AppCompatActivity() {
                 // Optional: Handle events related to recognition
             }
         })
+        btnViewCart.setOnClickListener {
+            val intent = Intent(this, CartActivity::class.java)
+            startActivity(intent)
+        }
 
         // Initialize menuAdapter and set it to recyclerView
         menuAdapter = MenuAdapter(menuItems) { menuItem ->

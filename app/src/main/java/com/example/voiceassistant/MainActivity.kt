@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.voiceassistant.LoginActivity.Companion.randomCode
 import com.google.firebase.dataconnect.serializers.UUIDSerializer
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     @Serializable
     data class CartItem(
         @SerialName("user_id") @Serializable(with = UUIDSerializer::class) val user_id: UUID,
+        @SerialName("order_id") val order_id: String,
         @SerialName("food_name") val foodName: String,
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
@@ -274,6 +276,7 @@ class MainActivity : AppCompatActivity() {
 
                 val cartItem = CartItem(
                     user_id = uuid2,
+                    order_id = randomCode,
                     foodName = menuItem.foodName,
                     category = menuItem.category,
                     taste = menuItem.taste,

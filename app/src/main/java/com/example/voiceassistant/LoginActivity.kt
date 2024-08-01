@@ -17,6 +17,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.random.Random
 
 class LoginActivity : AppCompatActivity() {
 
@@ -45,6 +46,11 @@ class LoginActivity : AppCompatActivity() {
         install(Postgrest)
     }
 
+    companion object {
+        var randomCode: String = ""
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -58,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
             val username = etUsername.text.toString()
             val password = etPassword.text.toString()
             lifecycleScope.launch {
+                generateRandomCode()
                 fetchUserData(username, password)
             }
         }
@@ -66,6 +73,14 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Register functionality not yet implemented", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    private fun generateRandomCode() {
+        val chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        randomCode = (1..10).map { chars.random() }.joinToString("")
+        Log.d("LoginActivity", "Generated random code: $randomCode")
+    }
+
 
     private suspend fun fetchUserData(username: String, password: String) {
         try {

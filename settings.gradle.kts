@@ -16,6 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        /*qr scanner start*/
+        maven { setUrl("https://jitpack.io") }
+        /*qr scanner end*/
     }
 }
 

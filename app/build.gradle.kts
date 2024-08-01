@@ -48,4 +48,8 @@ dependencies {
     implementation ("org.apache.commons:commons-csv:1.8")
     implementation ("org.apache.opennlp:opennlp-tools:1.9.3")
 
+    /*qr scanner start*/
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    /*qr scanner end*/
+
 }

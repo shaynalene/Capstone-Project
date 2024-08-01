@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">VoiceAssistant</string>
     <string name="item_image_desc">Image of the menu item</string>
+    <string name="delete_item">Delete Item</string>
+
 </resources>
 
 

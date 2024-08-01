@@ -1,28 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/textViewFoodName"
+    <!-- Delete Button -->
+    <ImageButton
+        android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Food Name"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:src="@drawable/ic_delete" /> <!-- Added padding to increase touch target size -->
 
-    <TextView
-        android:id="@+id/textViewQuantity"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Quantity: 1"
-        android:textSize="14sp" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="8dp">
 
-    <TextView
-        android:id="@+id/textViewPrice"
+        <TextView
+            android:id="@+id/textViewFoodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Name"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity: 1"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price: $0.00"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Quantity Controls -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Price: $0.00"
-        android:textSize="14sp" />
+        android:orientation="horizontal"
+        android:paddingStart="8dp">
+
+        <Button
+            android:id="@+id/button_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="18sp"
+            android:padding="12dp" /> <!-- Added padding to increase touch target size -->
+
+        <TextView
+            android:id="@+id/textViewQuantityControl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:padding="12dp" /> <!-- Added padding to increase touch target size -->
+
+        <Button
+            android:id="@+id/button_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:textSize="18sp"
+            android:padding="12dp" /> <!-- Added padding to increase touch target size -->
+    </LinearLayout>
 </LinearLayout>

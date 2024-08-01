@@ -36,6 +36,7 @@ class CartActivity : AppCompatActivity() {
 
     @Serializable
     data class CartItem(
+        @SerialName("cart_id") val cart_id: Int,
         @SerialName("food_name") val foodName: String,
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
@@ -111,7 +112,7 @@ class CartActivity : AppCompatActivity() {
                     filter {
                         //UserItem::userName eq username
                         //or
-                        eq("food_name", cartItem.foodName)
+                        eq("cart_id", cartItem.cart_id)
                     }
                 }
 

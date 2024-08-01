@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,20 +49,17 @@ class CartActivity : AppCompatActivity() {
         totalAmountTextView = findViewById(R.id.textViewTotalAmount)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        cartAdapter = CartAdapter(emptyList())
+        cartAdapter = CartAdapter(emptyList(), this::deleteItem)
         recyclerView.adapter = cartAdapter
 
-        // Initialize Button Click Listeners
         findViewById<Button>(R.id.btnGoBack).setOnClickListener {
-            finish() // Finish the activity to go back
+            finish()
         }
 
         findViewById<Button>(R.id.btnConfirmOrder).setOnClickListener {
             // Handle Confirm Order button click
-            // For example, navigate to another activity or submit order
         }
 
-        // Initialize Bottom Navigation
         findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_home -> {
@@ -96,6 +94,27 @@ class CartActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading cart items", e)
+            }
+        }
+    }
+
+    private fun deleteItem(cartItem: CartItem) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+
+                // Fetch user data from accounts_list table using the filter method
+                val response = supabase.postgrest.from("cart").delete(){
+                    filter {
+                        //UserItem::userName eq username
+                        //or
+                        eq("food_name", cartItem.foodName)
+                    }
+                }
+
+                // Reload cart items
+                loadCartItems()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error deleting cart item", e)
             }
         }
     }

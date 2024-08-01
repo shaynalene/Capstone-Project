@@ -1,5 +1,6 @@
 package com.example.voiceassistant
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.TextView
@@ -33,20 +34,18 @@ class QrScanner : AppCompatActivity() {
         codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
         codeScanner.isFlashEnabled = false // Whether to enable flash or not
 
-        // Callbacks
-        /*codeScanner.decodeCallback = DecodeCallback {
-            runOnUiThread {
-                /*Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()*/
-                val result = findViewById(R.id.showResult)
-            }
-        }*/
-
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
                 val resultTextView = findViewById<TextView>(R.id.showResult)
                 resultTextView.text = it.text
+
+                val result = it.text
+                val intent = Intent(this, OrderItems::class.java)
+                intent.putExtra("RESULT_TEXT", result)
+                startActivity(intent)
             }
         }
+
 
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
             runOnUiThread {

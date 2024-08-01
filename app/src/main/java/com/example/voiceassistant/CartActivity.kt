@@ -3,7 +3,6 @@ package com.example.voiceassistant
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,7 +87,12 @@ class CartActivity : AppCompatActivity() {
     private fun loadCartItems() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val result = supabase.postgrest.from("cart").select()
+                val orderid = randomCode
+                val result = supabase.postgrest.from("cart").select(){
+                    filter {
+                        eq("order_id", orderid)
+                    }
+                }
                 val items = result.decodeList<CartItem>()
                 val totalAmount = items.sumOf { it.price * it.quantity }
 

@@ -83,6 +83,11 @@ dependencies {
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
     /*qr scanner end*/
 
+    /*qr generator start*/
+    implementation ("com.google.zxing:core:3.4.1")
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    /*qr generator end*/
+
     // Additional libraries
     implementation("org.apache.commons:commons-csv:1.8")
     implementation("org.apache.opennlp:opennlp-tools:1.9.3")

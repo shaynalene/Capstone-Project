@@ -10,7 +10,10 @@
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete" /> <!-- Added padding to increase touch target size -->
+        android:src="@drawable/ic_delete"
+        android:contentDescription="@string/delete_item"
+        android:padding="8dp"
+        android:layout_marginEnd="8dp"/>
 
     <LinearLayout
         android:layout_width="0dp"

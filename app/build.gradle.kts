@@ -78,6 +78,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    
+    /*qr scanner start*/
+    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    /*qr scanner end*/
 
     // Additional libraries
     implementation("org.apache.commons:commons-csv:1.8")

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
 import kotlinx.serialization.Serializable
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
@@ -48,11 +49,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var menuAdapter: MenuAdapter
 
+
+
+
     val supabase = createSupabaseClient(
         supabaseUrl = "https://uwhuzbxzexkldttxxeee.supabase.co",
         supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3aHV6Ynh6ZXhrbGR0dHh4ZWVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIzNDQ0OTUsImV4cCI6MjAzNzkyMDQ5NX0.vIlTT6qLZkwjd3FY0sCx8UKzkHlsxjPXykv5Xy63vQw"
     ) {
         install(Postgrest)
+        install(Auth)
     }
 
     @Serializable
@@ -71,7 +76,6 @@ class MainActivity : AppCompatActivity() {
         @SerialName("price") val price: Double,
         @SerialName("quantity") val quantity: Int
     )
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,6 +182,10 @@ class MainActivity : AppCompatActivity() {
             addToCart(menuItem)
         }
         recyclerView.adapter = menuAdapter
+
+        // In MainActivity or any other activity
+        val uuid = LoginActivity.UserData.uuid
+        Log.d("MainActivity", "User UUID: $uuid")
     }
 
     private fun startVoiceRecognition() {
@@ -246,9 +254,8 @@ class MainActivity : AppCompatActivity() {
         }
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = menuAdapter
+
     }
-
-
 
     private fun addToCart(menuItem: MenuItem) {
         Log.d(TAG, "Data being inserted: hello")
@@ -342,8 +349,6 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
-
-
     private fun loadMenuItems() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -429,9 +434,8 @@ class MainActivity : AppCompatActivity() {
         return Pair(category, taste)
     }
 
-
-
     companion object {
+
         private const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_RECORD_AUDIO = 1
     }

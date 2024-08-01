@@ -3,13 +3,11 @@ package com.example.voiceassistant
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class OrderItemsAdapter(
-    private var items: List<OrderItems.CartItem>,
-    private val deleteItem: (OrderItems.CartItem) -> Unit
+    private var items: List<OrderItems.CartItem>
 ) : RecyclerView.Adapter<OrderItemsAdapter.CartViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -23,11 +21,6 @@ class OrderItemsAdapter(
         holder.foodNameTextView.text = item.foodName
         holder.quantityTextView.text = "Quantity: ${item.quantity}"
         holder.priceTextView.text = String.format("Price: $%.2f", item.price)
-
-        // Set the click listener for the delete button
-        holder.buttonDeleteItem.setOnClickListener {
-            deleteItem(item)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -43,6 +36,5 @@ class OrderItemsAdapter(
         val foodNameTextView: TextView = itemView.findViewById(R.id.textViewFoodName)
         val quantityTextView: TextView = itemView.findViewById(R.id.textViewQuantity)
         val priceTextView: TextView = itemView.findViewById(R.id.textViewPrice)
-        val buttonDeleteItem: ImageButton = itemView.findViewById(R.id.button_delete)
     }
 }

@@ -78,7 +78,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    
+
     /*qr scanner start*/
     implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
     /*qr scanner end*/
@@ -96,7 +96,4 @@ dependencies {
     //implementation ("io.github.jan.supabase:postgrest:0.1.0") // Replace with the correct version
     implementation ("com.github.kittinunf.fuel:fuel:2.3.1")
 
-    implementation("io.github.jan.supabase:supabase-client:1.0.0") // Check for the latest version
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 }
-

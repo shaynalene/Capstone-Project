@@ -28,7 +28,7 @@ class OrderItems : AppCompatActivity() {
 
     private val supabase = createSupabaseClient(
         supabaseUrl = "https://uwhuzbxzexkldttxxeee.supabase.co",
-        supabaseKey = "your-supabase-key" // replace with your actual key
+        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3aHV6Ynh6ZXhrbGR0dHh4ZWVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIzNDQ0OTUsImV4cCI6MjAzNzkyMDQ5NX0.vIlTT6qLZkwjd3FY0sCx8UKzkHlsxjPXykv5Xy63vQw"
     ) {
         install(Postgrest)
     }
@@ -57,9 +57,9 @@ class OrderItems : AppCompatActivity() {
         val btnGoBack: Button = findViewById(R.id.buttonGoBack)
         val btnConfirmOrder: Button = findViewById(R.id.orderComplete)
 
-        // Set up RecyclerView
+        // Initialize adapter
+        orderAdapter = OrderItemsAdapter(emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this)
-        orderAdapter = OrderItemsAdapter(emptyList(), this::deleteItem)
         recyclerView.adapter = orderAdapter
 
         // Handle button clicks
@@ -94,13 +94,8 @@ class OrderItems : AppCompatActivity() {
                     totalAmountTextView.text = String.format("Total Amount: $%.2f", totalAmount)
                 }
             } catch (e: Exception) {
-                Log.e("Order Items", "Error loading cart items", e)
+                Log.e("OrderItems", "Error loading cart items", e)
             }
         }
-    }
-
-    // Method to handle item deletion (if needed)
-    private fun deleteItem(cartItem: CartItem) {
-        // Implement the logic to delete an item if necessary
     }
 }

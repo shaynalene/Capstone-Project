@@ -17,65 +17,81 @@ import com.budiyev.android.codescanner.ScanMode
 
 class QrScanner : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
+    private lateinit var scannerView: CodeScannerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.qr_scanner)
-        val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
-
+        scannerView = findViewById(R.id.scanner_view)
         codeScanner = CodeScanner(this, scannerView)
 
-        // Parameters (default values)
-        codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
-        codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
-        // ex. listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE // or CONTINUOUS
-        codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
-        codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
-        codeScanner.isFlashEnabled = false // Whether to enable flash or not
+        setupScanner()
+        checkPermission(android.Manifest.permission.CAMERA, 13)
+    }
+
+    private fun setupScanner() {
+        codeScanner.camera = CodeScanner.CAMERA_BACK
+        codeScanner.formats = CodeScanner.ALL_FORMATS
+        codeScanner.autoFocusMode = AutoFocusMode.SAFE
+        codeScanner.scanMode = ScanMode.SINGLE
+        codeScanner.isAutoFocusEnabled = true
+        codeScanner.isFlashEnabled = false
 
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                val resultTextView = findViewById<TextView>(R.id.showResult)
-                resultTextView.text = it.text
-
                 val result = it.text
-                val intent = Intent(this, OrderItems::class.java)
-                intent.putExtra("RESULT_TEXT", result)
+                /*val showResult = findViewById<TextView>(R.id.showResult)
+                showResult.text = result*/
+
+                // Ensure the UI update and Intent creation are on the main thread
+                val intent = Intent(this, OrderItems::class.java).apply {
+                    putExtra("RESULT_TEXT", result)
+                }
                 startActivity(intent)
             }
         }
 
-
-        codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
+        codeScanner.errorCallback = ErrorCallback {
             runOnUiThread {
-                Toast.makeText(this, "Camera initialization error: ${it.message}",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Camera initialization error: ${it.message}", Toast.LENGTH_LONG).show()
             }
         }
 
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
-        
-        checkPermission(android.Manifest.permission.CAMERA, 13)
     }
 
     override fun onResume() {
         super.onResume()
-        codeScanner.startPreview()
+        if (::codeScanner.isInitialized) {
+            codeScanner.startPreview()
+        }
     }
 
     override fun onPause() {
-        codeScanner.releaseResources()
+        if (::codeScanner.isInitialized) {
+            codeScanner.releaseResources()
+        }
         super.onPause()
     }
 
-    private fun checkPermission(permission:String, reqCode:Int)
-    {
-        if(ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, arrayOf(permission),reqCode)
+    private fun checkPermission(permission: String, reqCode: Int) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(permission), reqCode)
+        } else {
+            codeScanner.startPreview()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 13) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                codeScanner.startPreview()
+            } else {
+                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

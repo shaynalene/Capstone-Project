@@ -60,6 +60,10 @@
             android:name=".QrScanner"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".OrderItems"
+            android:exported="true">
+        </activity>
 
 
     </application>

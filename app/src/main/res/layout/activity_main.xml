@@ -8,8 +8,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="372dp"
-        android:layout_height="592dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/inputLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,8 +47,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -63,10 +61,24 @@
         app:layout_constraintTop_toBottomOf="@id/recyclerView"
         app:layout_constraintVertical_bias="1.0" />
 
+    <Button
+        android:id="@+id/btnViewCart"
+        android:layout_width="190dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="50dp"
+        android:text="View Cart"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvResult"
+        app:layout_constraintVertical_bias="1.0" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
-        android:layout_width="409dp"
-        android:layout_height="53dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/mcdo"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"

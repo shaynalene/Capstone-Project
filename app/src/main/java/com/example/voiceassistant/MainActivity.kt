@@ -18,11 +18,25 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.dataconnect.serializers.UUIDSerializer
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
+import kotlinx.serialization.Serializable
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import opennlp.tools.tokenize.SimpleTokenizer
 import java.io.InputStreamReader
 import java.util.*
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import java.util.UUID
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,10 +45,41 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvSpeechInput: TextView
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var tts: TextToSpeech
+    private lateinit var btnViewCart: Button // Declare the button
 
-    private lateinit var menuItems: List<MenuItem>
+    private var menuItems: List<MenuItem> = emptyList() // Initialize with an empty list
+    //private lateinit var menuItems: List<MenuItem>
     private lateinit var recyclerView: RecyclerView
     private lateinit var menuAdapter: MenuAdapter
+
+
+
+
+    val supabase = createSupabaseClient(
+        supabaseUrl = "https://uwhuzbxzexkldttxxeee.supabase.co",
+        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3aHV6Ynh6ZXhrbGR0dHh4ZWVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIzNDQ0OTUsImV4cCI6MjAzNzkyMDQ5NX0.vIlTT6qLZkwjd3FY0sCx8UKzkHlsxjPXykv5Xy63vQw"
+    ) {
+        install(Postgrest)
+        install(Auth)
+    }
+
+    @Serializable
+    data class MenuItem(
+        @SerialName("food_name") val foodName: String,
+        @SerialName("category") val category: String,
+        @SerialName("taste") val taste: String,
+        @SerialName("price") val price: Double
+    )
+
+    @Serializable
+    data class CartItem(
+        @SerialName("user_id") @Serializable(with = UUIDSerializer::class) val user_id: UUID,
+        @SerialName("food_name") val foodName: String,
+        @SerialName("category") val category: String,
+        @SerialName("taste") val taste: String,
+        @SerialName("price") val price: Double,
+        @SerialName("quantity") val quantity: Int
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         tvResult = findViewById(R.id.tvResult)
         tvSpeechInput = findViewById(R.id.tvSpeechInput)
         recyclerView = findViewById(R.id.recyclerView)
+        btnViewCart = findViewById(R.id.btnViewCart) // Initialize the button
 
         // Initialize RecyclerView
         //recyclerView.layoutManager = LinearLayoutManager(this)
@@ -70,8 +116,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Load menu items
-        menuItems = loadMenuItems(this)
+        // Load menu items from Supabase
+        loadMenuItems()
 
         btnSpeak.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -130,12 +176,20 @@ class MainActivity : AppCompatActivity() {
                 // Optional: Handle events related to recognition
             }
         })
+        btnViewCart.setOnClickListener {
+            val intent = Intent(this, CartActivity::class.java)
+            startActivity(intent)
+        }
 
         // Initialize menuAdapter and set it to recyclerView
         menuAdapter = MenuAdapter(menuItems) { menuItem ->
             addToCart(menuItem)
         }
         recyclerView.adapter = menuAdapter
+
+        // In MainActivity or any other activity
+        val uuid = LoginActivity.UserData.uuid
+        Log.d("MainActivity", "User UUID: $uuid")
     }
 
     private fun startVoiceRecognition() {
@@ -204,15 +258,51 @@ class MainActivity : AppCompatActivity() {
         }
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = menuAdapter
+
     }
 
-
-
     private fun addToCart(menuItem: MenuItem) {
-        // Implement your logic to add the item to the cart
-        // For example, you could add it to a list and update the UI accordingly
-        // This is just a placeholder implementation
-        println("Added ${menuItem.foodName} to cart")
+        val uuid = LoginActivity.UserData.uuid
+        val uuid3 = extractUUID(uuid)
+        Log.d(TAG, "$uuid3")
+        val uuid2: UUID = UUID.fromString(uuid3)
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // val userId = "some_user_id" // Ensure this is valid
+
+                val cartItem = CartItem(
+                    user_id = uuid2,
+                    foodName = menuItem.foodName,
+                    category = menuItem.category,
+                    taste = menuItem.taste,
+                    price = menuItem.price,
+                    quantity = 1
+                )
+
+                Log.d(TAG, "Data being inserted: $cartItem")
+
+                // val response = supabase.postgrest.from("cart").insert(data).execute()
+                val result = supabase.postgrest.from("cart").insert(cartItem)
+                Log.d(TAG, "Supabase query result: $result")
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception in addToCart", e)
+                // Handle exception (e.g., show user feedback)
+            }
+        }
+    }
+
+    fun extractUUID(input: String): String? {
+        // Define the regex pattern for UUID
+        val regex = """([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})""".toRegex()
+
+        // Find the first match
+        val matchResult = regex.find(input)
+
+        // Return the matched value, or null if no match is found
+        return matchResult?.value
     }
 
     private fun speak(text: String) {
@@ -250,6 +340,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
     private fun loadMenuItems(context: Context): List<MenuItem> {
         val inputStream = context.assets.open("mcdelivery_menu.csv")
         val reader = InputStreamReader(inputStream)
@@ -277,6 +368,32 @@ class MainActivity : AppCompatActivity() {
 
         return menuItems
     }
+    */
+
+    private fun loadMenuItems() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val result = supabase.postgrest.from("mcdo_menu").select()
+                Log.d(TAG, "Supabase query result: $result")
+
+                val items = result.decodeList<MenuItem>()
+                Log.d(TAG, "Decoded items: $items")
+
+                withContext(Dispatchers.Main) {
+                    menuItems = items
+                    menuAdapter = MenuAdapter(menuItems) { menuItem ->
+                        addToCart(menuItem)
+                    }
+                    recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
+                    recyclerView.adapter = menuAdapter
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading menu items", e)
+            }
+        }
+    }
+
+
 
     private fun recommendItems(items: List<MenuItem>, category: String?, taste: String?): List<MenuItem> {
         return if (category == null && taste == null) {
@@ -338,14 +455,8 @@ class MainActivity : AppCompatActivity() {
         return Pair(category, taste)
     }
 
-    data class MenuItem(
-        val foodName: String,
-        val category: String,
-        val taste: String,
-        val price: Double
-    )
-
     companion object {
+
         private const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_RECORD_AUDIO = 1
     }

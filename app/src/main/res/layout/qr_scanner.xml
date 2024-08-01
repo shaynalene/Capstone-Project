@@ -34,7 +34,7 @@
             android:gravity="center"
             android:text="Focus on the QR Code"
             android:textStyle="bold"
-            android:textColor="@android:color/red" />
+            android:textColor="@android:color/holo_red_dark" />
     </com.budiyev.android.codescanner.CodeScannerView>
 
 </FrameLayout>

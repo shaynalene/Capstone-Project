@@ -7,5 +7,7 @@
     <color name="button_pressed_color">#FF000000</color>
     <color name="button_focused_color">#FF000000</color>
     <color name="color_item_selected">#FF0000</color>
+    <color name="custom_red">#FF0000</color>
+    <color name="gcash_color">#0000FF</color>
 
 </resources>

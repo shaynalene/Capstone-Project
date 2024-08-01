@@ -1,7 +1,9 @@
 package com.example.voiceassistant
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -56,9 +58,11 @@ class CartActivity : AppCompatActivity() {
             finish()
         }
 
-        findViewById<Button>(R.id.btnConfirmOrder).setOnClickListener {
-            // Handle Confirm Order button click
+        val btnConfirmOrder = findViewById<Button>(R.id.btnConfirmOrder)
+        btnConfirmOrder.setOnClickListener {
+            startActivity(Intent(this, Payment::class.java))
         }
+
 
         findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnNavigationItemSelectedListener {
             when (it.itemId) {

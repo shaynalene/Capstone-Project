@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.firebase.dataconnect)
 
     // Testing
     testImplementation(libs.junit)

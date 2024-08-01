@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     object UserData {
-        var uuid: String? = null
+        var uuid = ""
     }
 
 }

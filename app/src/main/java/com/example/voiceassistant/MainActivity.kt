@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.dataconnect.serializers.UUIDSerializer
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import kotlinx.serialization.Serializable
@@ -32,7 +33,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
+import java.util.UUID
 
 
 class MainActivity : AppCompatActivity() {
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     @Serializable
     data class CartItem(
+        @SerialName("user_id") @Serializable(with = UUIDSerializer::class) val user_id: UUID,
         @SerialName("food_name") val foodName: String,
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
@@ -258,12 +262,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addToCart(menuItem: MenuItem) {
-        Log.d(TAG, "Data being inserted: hello")
+        val uuid = LoginActivity.UserData.uuid
+        val uuid3 = extractUUID(uuid)
+        Log.d(TAG, "$uuid3")
+        val uuid2: UUID = UUID.fromString(uuid3)
+
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // val userId = "some_user_id" // Ensure this is valid
 
                 val cartItem = CartItem(
+                    user_id = uuid2,
                     foodName = menuItem.foodName,
                     category = menuItem.category,
                     taste = menuItem.taste,
@@ -282,6 +292,17 @@ class MainActivity : AppCompatActivity() {
                 // Handle exception (e.g., show user feedback)
             }
         }
+    }
+
+    fun extractUUID(input: String): String? {
+        // Define the regex pattern for UUID
+        val regex = """([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})""".toRegex()
+
+        // Find the first match
+        val matchResult = regex.find(input)
+
+        // Return the matched value, or null if no match is found
+        return matchResult?.value
     }
 
     private fun speak(text: String) {

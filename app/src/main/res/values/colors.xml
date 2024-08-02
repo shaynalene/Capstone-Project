@@ -12,5 +12,6 @@
     <color name="gcash_color">#0000FF</color>
     <color name="colorActive">#AD2900</color>
     <color name="colorInactive">#121212</color>
+    <color name="light_gray">#D3D3D3</color>
 
 </resources>

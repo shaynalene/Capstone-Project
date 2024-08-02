@@ -46,7 +46,6 @@ class CartActivity : AppCompatActivity() {
         @SerialName("payment_status") val paymentStatus: String
     )
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
@@ -67,65 +66,8 @@ class CartActivity : AppCompatActivity() {
             startActivity(Intent(this, Payment::class.java))
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-
-        // Set the selected item to Cart
-        bottomNavigationView.selectedItemId = R.id.action_cart
-
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_home -> {
-                    // Handle Home navigation
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                R.id.action_search -> {
-                    // Handle Search navigation
-                    true
-                }
-                R.id.action_cart -> {
-                    // Navigate to CartActivity
-                    val intent = Intent(this, CartActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                R.id.action_profile -> {
-                    // Handle Profile navigation
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                else -> false
-            }
-        }
-
         loadCartItems()
     }
-
-//    private fun loadCartItems() {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val orderid = randomCode
-//                val result = supabase.postgrest.from("cart").select(){
-//                    filter {
-//                        eq("order_id", orderid)
-//                    }
-//                }
-//                val items = result.decodeList<CartItem>()
-//                val totalAmount = items.sumOf { it.price * it.quantity }
-//
-//                withContext(Dispatchers.Main) {
-//                    cartAdapter.updateItems(items)
-//                    totalAmountTextView.text = String.format("Total Amount: $%.2f", totalAmount)
-//                }
-//            } catch (e: Exception) {
-//                Log.e(TAG, "Error loading cart items", e)
-//            }
-//        }
-//    }
-
-
 
     private fun loadCartItems() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -154,29 +96,23 @@ class CartActivity : AppCompatActivity() {
                     totalAmountTextView.text = String.format("Total Amount: $%.2f", totalAmount)
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    // Show a user-friendly error message
-                }
                 Log.e(TAG, "Error loading cart items", e)
             }
         }
     }
 
+
     private fun deleteItem(cartItem: CartItem) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Delete all items with the same food_name and order_id
                 val response = supabase.postgrest.from("cart").delete {
                     filter {
-                        // Match items with the same food_name and order_id
                         eq("food_name", cartItem.foodName)
                         eq("order_id", cartItem.orderid)
                     }
                 }
 
-                // Check if the delete operation was successful
                 if (response != null) {
-                    // Reload cart items
                     withContext(Dispatchers.Main) {
                         loadCartItems()
                     }
@@ -192,24 +128,30 @@ class CartActivity : AppCompatActivity() {
     private fun minusItem(cartItem: CartItem) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val updatedItem = cartItem.copy(quantity = cartItem.quantity - 1)
 
-                // Fetch user data from accounts_list table using the filter method
-                val response = supabase.postgrest.from("cart").delete(){
-                    filter {
-                        //UserItem::userName eq username
-                        //or
-                        eq("cart_id", cartItem.cart_id)
+                if (updatedItem.quantity <= 0) {
+                    deleteItem(cartItem)
+                } else {
+                    val response = supabase.postgrest.from("cart").update(updatedItem) {
+                        filter {
+                            eq("cart_id", cartItem.cart_id)
+                        }
+                    }
+
+                    if (response != null) {
+                        withContext(Dispatchers.Main) {
+                            loadCartItems()
+                        }
+                    } else {
+                        Log.e(TAG, "Failed to update cart item: No data in response")
                     }
                 }
-
-                // Reload cart items
-                loadCartItems()
             } catch (e: Exception) {
-                Log.e(TAG, "Error deleting cart item", e)
+                Log.e(TAG, "Error updating cart item", e)
             }
         }
     }
-
 
     private fun plusItem(cartItem: CartItem) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -240,17 +182,6 @@ class CartActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
     companion object {
         private const val TAG = "CartActivity"

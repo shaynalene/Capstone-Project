@@ -241,11 +241,11 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Voice command received: $command")
 
         // Normalize the command for exact matching
-        val normalizedCommand = command.trim().toLowerCase()
+        val normalizedCommand = command.trim().toLowerCase(Locale.getDefault())
         Log.d(TAG, "Normalized command: $normalizedCommand")
 
-        val response: String
-        val itemsToDisplay: List<MenuItem>
+        var response: String
+        var itemsToDisplay: List<MenuItem> = emptyList()
 
         if (normalizedCommand.contains("best seller", ignoreCase = true)) {
             Log.d(TAG, "Processing best seller command")
@@ -255,7 +255,6 @@ class MainActivity : AppCompatActivity() {
                 response = "Here are the best sellers."
             } else {
                 response = "No best sellers available."
-                itemsToDisplay = emptyList()
             }
         } else if (normalizedCommand.contains("recommend", ignoreCase = true) ||
             normalizedCommand.contains("want", ignoreCase = true) ||
@@ -266,7 +265,6 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Extracted category: $category, taste: $taste")
             if (category == null && taste == null) {
                 response = "Sorry, that is not on our menu."
-                itemsToDisplay = emptyList()
             } else {
                 val recommendations = recommendItems(menuItems, category, taste)
                 if (recommendations.isNotEmpty()) {
@@ -274,15 +272,25 @@ class MainActivity : AppCompatActivity() {
                     response = "Here are some recommendations."
                 } else {
                     response = "No recommendations available."
-                    itemsToDisplay = emptyList()
                 }
             }
         } else if (normalizedCommand.contains("hello", ignoreCase = true)) {
             response = "Hello! How can I assist you?"
-            itemsToDisplay = emptyList()
-        } else {
+        }  else if (normalizedCommand.contains("add", ignoreCase = true) &&
+            (normalizedCommand.contains("cart", ignoreCase = true) || normalizedCommand.contains("order", ignoreCase = true))) {
+            val itemName = extractItemName(normalizedCommand)
+            Log.d(TAG, "Extracted item name: $itemName")
+            val itemToAdd = itemName?.let { name ->
+                menuItems.find { it.foodName.lowercase(Locale.getDefault()) == name.lowercase(Locale.getDefault()) }
+            }
+            if (itemToAdd != null) {
+                addToCart(itemToAdd)
+                response = "${itemToAdd.foodName} has been added to your cart."
+            } else {
+                response = "Item not found."
+            }
+        }  else {
             response = "Sorry, I didn't understand that."
-            itemsToDisplay = emptyList()
         }
 
         // Display response in TextView and optionally speak it out loud
@@ -290,12 +298,27 @@ class MainActivity : AppCompatActivity() {
         if (response.isNotEmpty()) speak(response)
 
         // Update the RecyclerView with the items to display
-        menuAdapter = MenuAdapter(itemsToDisplay) { menuItem ->
-            addToCart(menuItem)
+        if (itemsToDisplay.isNotEmpty()) {
+            menuAdapter = MenuAdapter(itemsToDisplay) { menuItem ->
+                addToCart(menuItem)
+            }
+            recyclerView.layoutManager = GridLayoutManager(this, 2)
+            recyclerView.adapter = menuAdapter
         }
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        recyclerView.adapter = menuAdapter
+    }
 
+    private fun extractItemName(command: String): String? {
+        val normalizedCommand = command.trim().lowercase(Locale.getDefault())
+
+        // Improved regex patterns to handle optional leading words and variations
+        val addPattern = ".*\\badd\\s+(?:to\\s*(?:cart|order)|order)\\s+(?:a\\s*|an\\s*|another\\s*)?(.*)".toRegex(RegexOption.IGNORE_CASE)
+        val orderPattern = ".*\\border\\s+(?:a\\s*|an\\s*|another\\s*)?(.*)".toRegex(RegexOption.IGNORE_CASE)
+
+        return when {
+            addPattern.matches(normalizedCommand) -> addPattern.find(normalizedCommand)?.groups?.get(1)?.value?.trim()
+            orderPattern.matches(normalizedCommand) -> orderPattern.find(normalizedCommand)?.groups?.get(1)?.value?.trim()
+            else -> null
+        }
     }
 
     private fun addToCart(menuItem: MenuItem) {

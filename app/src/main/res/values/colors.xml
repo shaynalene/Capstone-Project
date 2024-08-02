@@ -3,11 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mcdo">#ffbc0d</color>
+    <color name="mcdored">#9D001F</color>
     <color name="nav_item_color_inactive">#FFD700</color>
     <color name="button_pressed_color">#FF000000</color>
     <color name="button_focused_color">#FF000000</color>
     <color name="color_item_selected">#FF0000</color>
     <color name="custom_red">#FF0000</color>
     <color name="gcash_color">#0000FF</color>
+    <color name="colorActive">#AD2900</color>
+    <color name="colorInactive">#121212</color>
 
 </resources>

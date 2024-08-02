@@ -10,6 +10,13 @@ android {
     namespace = "com.example.voiceassistant"
     compileSdk = 34
 
+    packagingOptions {
+        exclude ("META-INF/DEPENDENCIES")
+        exclude ("META-INF/NOTICE.md")
+        exclude ("META-INF/LICENSE.md")
+    }
+
+
     defaultConfig {
         applicationId = "com.example.voiceassistant"
         minSdk = 21
@@ -36,6 +43,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
 
 
@@ -45,6 +53,7 @@ android {
 dependencies {
     // Use the BOM to manage Supabase versions
     implementation(platform("io.github.jan-tennert.supabase:bom:2.5.4"))
+
 
     // Supabase libraries (do not specify versions, managed by the BOM)
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
@@ -65,7 +74,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Android dependencies
-    implementation("com.google.android.material:material:1.4.0")
+    //implementation("com.google.android.material:material:1.6.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -88,6 +97,14 @@ dependencies {
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     /*qr generator end*/
 
+    // OkHttp for HTTP requests
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //implementation("com.sendgrid:sendgrid-java:4.10.1")
+
+    implementation("com.sun.mail:android-mail:1.6.6")
+    implementation("com.sun.mail:android-activation:1.6.6")
+
     // Additional libraries
     implementation("org.apache.commons:commons-csv:1.8")
     implementation("org.apache.opennlp:opennlp-tools:1.9.3")
@@ -95,5 +112,8 @@ dependencies {
     //implementation ("io.github.jan.supabase:supabase-client:0.2.0") // Replace with the correct version
     //implementation ("io.github.jan.supabase:postgrest:0.1.0") // Replace with the correct version
     implementation ("com.github.kittinunf.fuel:fuel:2.3.1")
+
+    // Design using Materials
+    implementation ("com.google.android.material:material:1.6.0")
 
 }

@@ -6,5 +6,6 @@
         <!-- Other color attributes -->
     </style>
 
+
     <style name="Theme.VoiceAssistant" parent="Base.Theme.VoiceAssistant" />
 </resources>

@@ -3,4 +3,6 @@
     <item android:color="@color/mcdo" android:state_checked="true" />
     <item android:color="@color/color_item_selected" android:state_checked="true"/>
     <item android:color="@color/nav_item_color_inactive" />
+    <item android:color="@color/colorActive" android:state_checked="true"/>
+    <item android:color="@color/colorInactive"/>
 </selector>

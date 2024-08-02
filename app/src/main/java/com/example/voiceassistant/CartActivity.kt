@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.voiceassistant.LoginActivity.Companion.randomCode
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -62,19 +63,33 @@ class CartActivity : AppCompatActivity() {
             startActivity(Intent(this, Payment::class.java))
         }
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
-        findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnNavigationItemSelectedListener {
-            when (it.itemId) {
+        // Set the selected item to Cart
+        bottomNavigationView.selectedItemId = R.id.action_cart
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
                 R.id.action_home -> {
-                    // Handle home action
+                    // Handle Home navigation
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.action_search -> {
+                    // Handle Search navigation
                     true
                 }
                 R.id.action_cart -> {
-                    // Handle cart action
+                    // Navigate to CartActivity
+                    val intent = Intent(this, CartActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.action_profile -> {
-                    // Handle profile action
+                    // Handle Profile navigation
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false

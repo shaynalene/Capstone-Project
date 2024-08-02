@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.voiceassistant.LoginActivity.Companion.randomCode
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.dataconnect.serializers.UUIDSerializer
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -52,9 +53,6 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var menuItems: List<MenuItem>
     private lateinit var recyclerView: RecyclerView
     private lateinit var menuAdapter: MenuAdapter
-
-
-
 
     val supabase = createSupabaseClient(
         supabaseUrl = "https://uwhuzbxzexkldttxxeee.supabase.co",
@@ -91,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         tvResult = findViewById(R.id.tvResult)
         tvSpeechInput = findViewById(R.id.tvSpeechInput)
         recyclerView = findViewById(R.id.recyclerView)
-        btnViewCart = findViewById(R.id.btnViewCart) // Initialize the button
+        //btnViewCart = findViewById(R.id.btnViewCart) // Initialize the button
 
         // Initialize RecyclerView
         //recyclerView.layoutManager = LinearLayoutManager(this)
@@ -120,6 +118,36 @@ class MainActivity : AppCompatActivity() {
 
         // Load menu items from Supabase
         loadMenuItems()
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_home -> {
+                    // Handle Home navigation
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.action_search -> {
+                    // Handle Search navigation
+                    true
+                }
+                R.id.action_cart -> {
+                    // Navigate to CartActivity
+                    val intent = Intent(this, CartActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.action_profile -> {
+                    // Handle Profile navigation
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
 
         btnSpeak.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -178,10 +206,10 @@ class MainActivity : AppCompatActivity() {
                 // Optional: Handle events related to recognition
             }
         })
-        btnViewCart.setOnClickListener {
-            val intent = Intent(this, CartActivity::class.java)
-            startActivity(intent)
-        }
+        //btnViewCart.setOnClickListener {
+        //    val intent = Intent(this, CartActivity::class.java)
+        //    startActivity(intent)
+        //}
 
         // Initialize menuAdapter and set it to recyclerView
         menuAdapter = MenuAdapter(menuItems) { menuItem ->

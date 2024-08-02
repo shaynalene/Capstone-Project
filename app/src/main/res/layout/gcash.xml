@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="72dp"
         android:paddingTop="50dp"
-        app:srcCompat="@drawable/gcashlogo" />
+        app:srcCompat="@drawable/mcdo" /> <!--NAG MCDO L0GO MUNA AKO, WALA KASI SI GCASH-->
 
     <TextView
         android:id="@+id/textView4"

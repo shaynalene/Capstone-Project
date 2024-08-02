@@ -115,6 +115,7 @@ class LoginActivity : AppCompatActivity() {
                 filter {
                     //UserItem::userName eq username
                     //or
+                    eq("username", username)
                     eq("password", password)
                 }
             }

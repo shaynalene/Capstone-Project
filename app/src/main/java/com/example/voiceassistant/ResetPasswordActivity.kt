@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.textfield.TextInputEditText
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.OtpType
@@ -17,9 +18,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ResetPasswordActivity : AppCompatActivity() {
-    private lateinit var etResetCode: EditText
-    private lateinit var resetCodeInputLayout: EditText
-    private lateinit var etNewPassword: EditText
+    private lateinit var etResetCode: TextInputEditText
+    //private lateinit var resetCodeInputLayout: TextInputEditText
+    private lateinit var etNewPassword: TextInputEditText
     private lateinit var btnUpdatePassword: Button
 
 
@@ -35,7 +36,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reset_password)
 
         etResetCode = findViewById(R.id.etResetCode)
-        resetCodeInputLayout = findViewById(R.id.textInputLayoutResetCode)
+        //resetCodeInputLayout = findViewById(R.id.textInputLayoutResetCode)
         etNewPassword = findViewById(R.id.etNewPassword)
         btnUpdatePassword = findViewById(R.id.btnUpdatePassword)
 

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.textfield.TextInputEditText
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -23,13 +24,13 @@ import kotlinx.serialization.Serializable
 
 class ProfileActivity : AppCompatActivity() {
 
-    private lateinit var tvUsername: TextView
-    private lateinit var tvFirstName: TextView
-    private lateinit var tvMiddleName: TextView
-    private lateinit var tvLastName: TextView
-    private lateinit var tvBirthDate: TextView
-    private lateinit var tvContactNumber: TextView
-    private lateinit var tvEmailAddress: TextView
+    private lateinit var etUsername: TextInputEditText
+    private lateinit var etFirstName: TextInputEditText
+    private lateinit var etMiddleName: TextInputEditText
+    private lateinit var etLastName: TextInputEditText
+    private lateinit var etBirthDate: TextInputEditText
+    private lateinit var etContactNumber: TextInputEditText
+    private lateinit var etEmailAddress: TextInputEditText
 
     private val supabase: SupabaseClient = createSupabaseClient(
         supabaseUrl = "https://uwhuzbxzexkldttxxeee.supabase.co",
@@ -55,13 +56,13 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        tvUsername = findViewById(R.id.tvUsername)
-        tvFirstName = findViewById(R.id.tvFirstName)
-        tvMiddleName = findViewById(R.id.tvMiddleName)
-        tvLastName = findViewById(R.id.tvLastName)
-        tvBirthDate = findViewById(R.id.tvBirthDate)
-        tvContactNumber = findViewById(R.id.tvContactNumber)
-        tvEmailAddress = findViewById(R.id.tvEmailAddress)
+        etUsername = findViewById(R.id.etUsername)
+        etFirstName = findViewById(R.id.etFirstName)
+        etMiddleName = findViewById(R.id.etMiddleName)
+        etLastName = findViewById(R.id.etLastName)
+        etBirthDate = findViewById(R.id.etBirthDate)
+        etContactNumber = findViewById(R.id.etContactNumber)
+        etEmailAddress = findViewById(R.id.etEmailAddress)
 
         val userId = intent.getStringExtra("USER_ID") ?: return
 
@@ -113,16 +114,16 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 val items = response.decodeList<RegisterUser>()
 
-                withContext(Dispatchers.Main) {
-                    val user = response.data as RegisterUser
-                    tvUsername.text = user.userName
-                    tvFirstName.text = user.firstName
-                    tvMiddleName.text = user.middleName
-                    tvLastName.text = user.lastName
-                    tvBirthDate.text = user.birthDate
-                    tvContactNumber.text = user.contactNumber
-                    tvEmailAddress.text = user.emailAddress
-                }
+                //withContext(Dispatchers.Main) {
+                //    val user = response.data as RegisterUser
+                //    etUsername.text = user.userName
+                //    etFirstName.text = user.firstName
+                //    etMiddleName.text = user.middleName
+                //    etLastName.text = user.lastName
+                //    etBirthDate.text = user.birthDate
+                 //   tvContactNumber.text = user.contactNumber
+                //    tvEmailAddress.text = user.emailAddress
+                //}
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading cart items", e)
             }

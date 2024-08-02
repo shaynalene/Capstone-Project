@@ -78,7 +78,8 @@ class MainActivity : AppCompatActivity() {
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
         @SerialName("price") val price: Double,
-        @SerialName("quantity") val quantity: Int
+        @SerialName("quantity") val quantity: Int,
+        @SerialName("payment_status") val paymentStatus: String
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -309,7 +310,8 @@ class MainActivity : AppCompatActivity() {
                     category = menuItem.category,
                     taste = menuItem.taste,
                     price = menuItem.price,
-                    quantity = 1
+                    quantity = 1,
+                    paymentStatus = "Not Paid"
                 )
 
                 Log.d(TAG, "Data being inserted: $cartItem")
@@ -488,7 +490,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val TAG = "MainActivity"
+        const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_RECORD_AUDIO = 1
     }
 }

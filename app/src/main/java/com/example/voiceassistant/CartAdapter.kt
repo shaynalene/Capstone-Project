@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CartAdapter(
     private var items: List<CartActivity.CartItem>,
-    private val deleteItem: (CartActivity.CartItem) -> Unit // Change here to define the callback
+    private val deleteItem: (CartActivity.CartItem) -> Unit,
+    private val minusItem: (CartActivity.CartItem) -> Unit,
+    private val plusItem: (CartActivity.CartItem) -> Unit// Change here to define the callback
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -29,6 +31,14 @@ class CartAdapter(
         holder.buttonDeleteItem.setOnClickListener {
             deleteItem(item)
         }
+
+        holder.buttonMinusItem.setOnClickListener {
+            minusItem(item)
+        }
+
+        holder.buttonPlusItem.setOnClickListener {
+            plusItem(item)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -45,5 +55,7 @@ class CartAdapter(
         val quantityTextView: TextView = itemView.findViewById(R.id.textViewQuantity)
         val priceTextView: TextView = itemView.findViewById(R.id.textViewPrice)
         val buttonDeleteItem: ImageButton = itemView.findViewById(R.id.button_delete)
+        val buttonMinusItem: Button = itemView.findViewById(R.id.button_minus)
+        val buttonPlusItem: Button = itemView.findViewById(R.id.button_plus)
     }
 }

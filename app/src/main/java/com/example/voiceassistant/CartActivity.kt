@@ -36,12 +36,14 @@ class CartActivity : AppCompatActivity() {
     @Serializable
     data class CartItem(
         @SerialName("cart_id") val cart_id: Int,
+        @SerialName("order_id") val orderid: String,
         @SerialName("food_name") val foodName: String,
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
         @SerialName("price") val price: Double,
         @SerialName("quantity") val quantity: Int
     )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +53,7 @@ class CartActivity : AppCompatActivity() {
         totalAmountTextView = findViewById(R.id.textViewTotalAmount)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        cartAdapter = CartAdapter(emptyList(), this::deleteItem)
+        cartAdapter = CartAdapter(emptyList(), this::deleteItem, this::minusItem, this::plusItem)
         recyclerView.adapter = cartAdapter
 
         findViewById<Button>(R.id.btnGoBack).setOnClickListener {
@@ -99,29 +101,92 @@ class CartActivity : AppCompatActivity() {
         loadCartItems()
     }
 
+//    private fun loadCartItems() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val orderid = randomCode
+//                val result = supabase.postgrest.from("cart").select(){
+//                    filter {
+//                        eq("order_id", orderid)
+//                    }
+//                }
+//                val items = result.decodeList<CartItem>()
+//                val totalAmount = items.sumOf { it.price * it.quantity }
+//
+//                withContext(Dispatchers.Main) {
+//                    cartAdapter.updateItems(items)
+//                    totalAmountTextView.text = String.format("Total Amount: $%.2f", totalAmount)
+//                }
+//            } catch (e: Exception) {
+//                Log.e(TAG, "Error loading cart items", e)
+//            }
+//        }
+//    }
+
+
     private fun loadCartItems() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val orderid = randomCode
-                val result = supabase.postgrest.from("cart").select(){
+                val result = supabase.postgrest.from("cart").select {
                     filter {
                         eq("order_id", orderid)
                     }
                 }
-                val items = result.decodeList<CartItem>()
-                val totalAmount = items.sumOf { it.price * it.quantity }
+                val items = result.decodeList<CartItem>() ?: emptyList()
+
+                // Aggregate items by food_name and order_id
+                val aggregatedItems = items
+                    .groupBy { it.foodName to it.orderid }
+                    .map { (key, groupedItems) ->
+                        val totalQuantity = groupedItems.sumOf { it.quantity }
+                        val firstItem = groupedItems.first()
+                        firstItem.copy(quantity = totalQuantity, price = totalQuantity * firstItem.price)
+                    }
+
+                val totalAmount = aggregatedItems.sumOf { it.price }
 
                 withContext(Dispatchers.Main) {
-                    cartAdapter.updateItems(items)
+                    cartAdapter.updateItems(aggregatedItems)
                     totalAmountTextView.text = String.format("Total Amount: $%.2f", totalAmount)
                 }
             } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    // Show a user-friendly error message
+                }
                 Log.e(TAG, "Error loading cart items", e)
             }
         }
     }
 
     private fun deleteItem(cartItem: CartItem) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Delete all items with the same food_name and order_id
+                val response = supabase.postgrest.from("cart").delete {
+                    filter {
+                        // Match items with the same food_name and order_id
+                        eq("food_name", cartItem.foodName)
+                        eq("order_id", cartItem.orderid)
+                    }
+                }
+
+                // Check if the delete operation was successful
+                if (response != null) {
+                    // Reload cart items
+                    withContext(Dispatchers.Main) {
+                        loadCartItems()
+                    }
+                } else {
+                    Log.e(TAG, "Failed to delete cart items: No data in response")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error deleting cart items", e)
+            }
+        }
+    }
+
+    private fun minusItem(cartItem: CartItem) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
 
@@ -141,6 +206,48 @@ class CartActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    private fun plusItem(cartItem: CartItem) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Increase quantity
+                val updatedItem = cartItem.copy(quantity = cartItem.quantity + 1)
+
+                // Update the existing item in Supabase
+                val response = supabase.postgrest.from("cart").update(updatedItem) {
+                    filter {
+                        eq("cart_id", cartItem.cart_id)
+                    }
+                }
+
+                // Check if the response contains data or if there's an error
+                if (response != null) {
+                    // Reload cart items to reflect the changes
+                    withContext(Dispatchers.Main) {
+                        loadCartItems()
+                    }
+                } else {
+                    // Handle error or empty response
+                    Log.e(TAG, "Failed to update cart item: No data in response")
+                }
+            } catch (e: Exception) {
+                // Handle any exceptions thrown during the operation
+                Log.e(TAG, "Error updating cart item", e)
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     companion object {
         private const val TAG = "CartActivity"

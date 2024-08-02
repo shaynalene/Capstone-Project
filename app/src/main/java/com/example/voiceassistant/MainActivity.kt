@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_profile -> {
                     // Handle Profile navigation
                     val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USER_ID", "some-user-id")
                     startActivity(intent)
                     true
                 }

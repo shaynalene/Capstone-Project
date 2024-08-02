@@ -2,6 +2,7 @@ package com.example.voiceassistant
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -81,25 +82,60 @@ class RegisterActivity : AppCompatActivity() {
             val emailAddress = etEmailAddress.text.toString().trim()
 
             if (username.isNotEmpty() && password.isNotEmpty() && emailAddress.isNotEmpty()) {
-                lifecycleScope.launch {
-                    registerUser(
-                        RegisterUser(
-                            id = UUID.randomUUID().toString(),
-                            userName = username,
-                            password = password,
-                            firstName = firstName,
-                            middleName = middleName,
-                            lastName = lastName,
-                            birthDate = birthDate,
-                            contactNumber = contactNumber,
-                            emailAddress = emailAddress
-                        )
-                    )
+                if (contactNumber.length != 11 || !contactNumber.all { it.isDigit() }) {
+                    Toast.makeText(this, "Contact number must be exactly 11 digits.", Toast.LENGTH_SHORT).show()
+                } else {
+                    lifecycleScope.launch {
+                        // Fetch username from accounts_list table using the filter method
+                        val response1 = supabase.postgrest.from("accounts_list").select(columns = Columns.list("username")) {
+                            filter {
+                                eq("username", username)
+                            }
+                        }
+
+                        val existingUsername = response1.data
+                        val regex = """"username":"(.*?)"""".toRegex()
+                        val matchResult = regex.find(existingUsername)
+                        val etdExistingUser = matchResult?.groupValues?.get(1)
+
+                        // Fetch email from accounts_list table using the filter method
+                        val response2 = supabase.postgrest.from("accounts_list").select(columns = Columns.list("email")) {
+                            filter {
+                                eq("email", emailAddress)
+                            }
+                        }
+
+                        val existingEmail = response2.data
+                        val regex2 = """"email":"(.*?)"""".toRegex()
+                        val matchResult2 = regex2.find(existingEmail)
+                        val etdExistingEmail = matchResult2?.groupValues?.get(1)
+
+                        if (username == etdExistingUser) {
+                            Toast.makeText(this@RegisterActivity, "Existing username. Try again.", Toast.LENGTH_SHORT).show()
+                        } else if (emailAddress == etdExistingEmail) {
+                            Toast.makeText(this@RegisterActivity, "Existing email. Try again.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            registerUser(
+                                RegisterUser(
+                                    id = UUID.randomUUID().toString(),
+                                    userName = username,
+                                    password = password,
+                                    firstName = firstName,
+                                    middleName = middleName,
+                                    lastName = lastName,
+                                    birthDate = birthDate,
+                                    contactNumber = contactNumber,
+                                    emailAddress = emailAddress
+                                )
+                            )
+                        }
+                    }
                 }
             } else {
                 Toast.makeText(this, "Please fill in the required fields.", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun showDatePickerDialog() {
@@ -120,8 +156,6 @@ class RegisterActivity : AppCompatActivity() {
         )
         datePickerDialog.show()
     }
-
-
 
     private suspend fun registerUser(user: RegisterUser) {
         try {

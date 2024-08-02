@@ -9,36 +9,13 @@
 
     <!-- First Name -->
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="78dp"
-        android:layout_height="74dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.165"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mcdo" />
-
-    <TextView
-        android:id="@+id/accountPrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Account Details"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.639"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="47dp" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameLayout"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accountPrompt"
         app:layout_constraintWidth_default="wrap"
@@ -46,10 +23,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etUsername"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="50dp"
-            android:hint="Username"
-            android:text="[placeholder]" />
+            android:enabled="false"
+            android:hint="Username" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,10 +43,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etFirstName"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="First Name"
-            android:text="[placeholder]" />
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,10 +64,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etMiddleName"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Middle Name"
-            android:text="[placeholder]" />
+            android:text="[placeholder]"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,10 +86,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etLastName"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Last Name"
-            android:text="[placeholder]" />
+            android:text="[placeholder]"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,10 +108,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etBirthDate"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Birth Date"
-            android:text="[placeholder]" />
+            android:text="[placeholder]"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,10 +130,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etContactNumber"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Contact Number"
-            android:text="[placeholder]" />
+            android:text="[placeholder]"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,10 +152,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmailAddress"
-            android:layout_width="210dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Email Address"
-            android:text="[placeholder]" />
+            android:text="[placeholder]"
+            android:enabled="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,5 +174,52 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        app:layout_constraintTop_toBottomOf="@id/emailAddressLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="173dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:text="Logout"
+        android:textColorLink="#590505"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.126"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/accountPrompt" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="112dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mcdo" />
+
+    <TextView
+        android:id="@+id/accountPrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Account Details"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

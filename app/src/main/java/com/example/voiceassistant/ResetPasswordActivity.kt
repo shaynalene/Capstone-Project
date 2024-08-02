@@ -60,15 +60,22 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private suspend fun validateResetCode(resetCode: String): Boolean {
         return try {
-            val response = supabase.postgrest.from("password_reset_tokens").select(columns = Columns.list("expires_at")) {
+            val response = supabase.postgrest.from("password_reset_tokens").select(columns = Columns.list("reset_code")) {
                 filter {
                     eq("reset_code", resetCode)
                 }
             }
 
-            Log.d("ResetPasswordActivity", "Supabase response: ${response.data}")
+            val input = response.data
+            val regex = """"reset_code":"(.*?)"""".toRegex()
+            val matchResult = regex.find(input)
+            val verifyresetCode = matchResult?.groupValues?.get(1)
 
-        true
+            if(verifyresetCode == resetCode) {
+                return true
+            }
+
+            false
         } catch (e: Exception) {
             Log.e("ResetPasswordActivity", "Error validating reset code: ${e.message}", e)
             false

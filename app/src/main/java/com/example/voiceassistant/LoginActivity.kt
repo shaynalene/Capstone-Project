@@ -102,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            //USERDATA: EMAIL
+            //USERDATA: USERNAME
             //USERDATA2: PASSWORD
             //USERDATA3: UUID
 
@@ -141,12 +141,12 @@ class LoginActivity : AppCompatActivity() {
                 UserData.uuid = userData3
 
                 // Proceed with successful data fetch
-                Toast.makeText(this, "Data fetched successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
             else{
-                Toast.makeText(this, "Incorrect credentials", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Incorrect credentials.", Toast.LENGTH_SHORT).show()
             }
 
         } catch (e: Exception) {

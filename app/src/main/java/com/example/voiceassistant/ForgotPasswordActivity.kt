@@ -69,7 +69,18 @@ class ForgotPasswordActivity : AppCompatActivity() {
                     eq("email", email)
                 }
             }
-            response.data?.isNotEmpty() == true
+
+            val existingemail = response.data
+            val regex = """"email":"(.*?)"""".toRegex()
+            val matchResult = regex.find(existingemail)
+            val etdexistingemail = matchResult?.groupValues?.get(1)
+
+            if(etdexistingemail == email) {
+                return true
+            }
+            Log.d("ForgotPasswordActivity", "FORGOT EMAIL: $etdexistingemail")
+
+            false
         } catch (e: Exception) {
             Toast.makeText(this, "Error checking email: ${e.message}", Toast.LENGTH_SHORT).show()
             false
@@ -109,7 +120,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 val intent = Intent(this, ResetPasswordActivity::class.java)
                 startActivity(intent)
 
-                false
+                true
             }
         } catch (e: Exception) {
             Log.e("ForgotPasswordActivity", "Error generating reset code: ${e.message}", e)
@@ -134,7 +145,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
             val session = Session.getInstance(properties, object : Authenticator() {
                 override fun getPasswordAuthentication(): PasswordAuthentication {
-                    return PasswordAuthentication("apikey", "_INSERT_API_KEY_") // CHANGE THE PASSWORD WITH THE API KEY
+                    return PasswordAuthentication("apikey", "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") // CHANGE THE PASSWORD WITH THE API KEY
                 }
             })
 

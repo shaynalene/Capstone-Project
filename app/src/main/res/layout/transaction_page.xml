@@ -41,7 +41,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="550dp"
+                android:layout_height="585dp"
                 android:clipToPadding="false"
                 android:padding="8dp" />
 
@@ -59,42 +59,48 @@
 
         <ImageButton
             android:id="@+id/scannerButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_home"
+            android:contentDescription="Scanner Button"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:scaleType="centerInside"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/transactionButton"
-            app:layout_constraintHorizontal_bias="0.5"/>
+            app:layout_constraintEnd_toStartOf="@+id/transactionButton"/>
 
         <ImageButton
             android:id="@+id/transactionButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_email"
+            android:src="@drawable/baseline_receipt_24"
+            android:contentDescription="Transaction Button"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:scaleType="centerInside"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/scannerButton"
-            app:layout_constraintEnd_toStartOf="@+id/userButton"
-            app:layout_constraintHorizontal_bias="0.5"/>
+            app:layout_constraintEnd_toStartOf="@+id/userButton"/>
 
         <ImageButton
             android:id="@+id/userButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_profile"
+            android:contentDescription="User Button"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:scaleType="centerInside"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/transactionButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

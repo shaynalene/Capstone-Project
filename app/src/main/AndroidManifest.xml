@@ -52,7 +52,6 @@
         <activity android:name=".ProfileActivity"
             android:exported="true"/>
 
-
         <activity
             android:name=".Payment"
             android:exported="true">
@@ -81,7 +80,6 @@
             android:name=".OrderDetails"
             android:exported="true">
         </activity>
-
 
     </application>
 

@@ -3,6 +3,7 @@ package com.example.voiceassistant
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -61,7 +62,19 @@ class TransactionPage : AppCompatActivity() {
 
         // Load cart items from Supabase
         loadResults()
+
+        // Set up button listeners for redirection
+        findViewById<ImageButton>(R.id.scannerButton).setOnClickListener {
+            startActivity(Intent(this, QrScanner::class.java))
+        }
+        findViewById<ImageButton>(R.id.transactionButton).setOnClickListener {
+            // No action needed as this is the current activity
+        }
+        findViewById<ImageButton>(R.id.userButton).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
     }
+
 
     private fun loadResults() {
         CoroutineScope(Dispatchers.IO).launch {

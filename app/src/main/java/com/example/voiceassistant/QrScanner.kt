@@ -31,15 +31,15 @@ class QrScanner : AppCompatActivity() {
         val transactionButton: ImageButton = findViewById(R.id.transactionButton)
         val userButton: ImageButton = findViewById(R.id.userButton)
         scannerButton.setOnClickListener {
-            startActivity(Intent(this, QrScanner::class.java))
+            // No need to add anything here
         }
         /*transaction page*/
         transactionButton.setOnClickListener {
-            startActivity(Intent(this, QrScanner::class.java))
+            startActivity(Intent(this, TransactionPage::class.java))
         }
         /*user account page*/
         userButton.setOnClickListener {
-            startActivity(Intent(this, QrScanner::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
         setupScanner()

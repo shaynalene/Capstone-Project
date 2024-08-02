@@ -40,8 +40,6 @@ class QrScanner : AppCompatActivity() {
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
                 val result = it.text
-                /*val showResult = findViewById<TextView>(R.id.showResult)
-                showResult.text = result*/
 
                 // Ensure the UI update and Intent creation are on the main thread
                 val intent = Intent(this, OrderItems::class.java).apply {

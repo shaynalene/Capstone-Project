@@ -40,7 +40,8 @@ class OrderItems : AppCompatActivity() {
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
         @SerialName("price") val price: Double,
-        @SerialName("quantity") val quantity: Int
+        @SerialName("quantity") val quantity: Int,
+        @SerialName("payment_status") val paymentStatus: String
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

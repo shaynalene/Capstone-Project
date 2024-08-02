@@ -131,7 +131,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
             val session = Session.getInstance(properties, object : Authenticator() {
                 override fun getPasswordAuthentication(): PasswordAuthentication {
-                    return PasswordAuthentication("apikey", "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")
+                    return PasswordAuthentication("apikey", "_PLACE_API_KEY_HERE_") // CHANGE THE PASSWORD WITH THE API KEY
                 }
             })
 

@@ -97,6 +97,9 @@ dependencies {
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     /*qr generator end*/
 
+    /*for null values in transaction page*/
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
     // OkHttp for HTTP requests
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 

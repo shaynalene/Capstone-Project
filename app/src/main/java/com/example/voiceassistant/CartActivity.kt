@@ -17,8 +17,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 
 class CartActivity : AppCompatActivity() {
 
@@ -41,7 +42,8 @@ class CartActivity : AppCompatActivity() {
         @SerialName("category") val category: String,
         @SerialName("taste") val taste: String,
         @SerialName("price") val price: Double,
-        @SerialName("quantity") val quantity: Int
+        @SerialName("quantity") val quantity: Int,
+        @SerialName("payment_status") val paymentStatus: String
     )
 
 
@@ -122,6 +124,7 @@ class CartActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
 
 
     private fun loadCartItems() {

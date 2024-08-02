@@ -3,6 +3,8 @@ package com.example.voiceassistant
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,21 @@ class QrScanner : AppCompatActivity() {
         setContentView(R.layout.qr_scanner)
         scannerView = findViewById(R.id.scanner_view)
         codeScanner = CodeScanner(this, scannerView)
+
+        val scannerButton: ImageButton = findViewById(R.id.scannerButton)
+        val transactionButton: ImageButton = findViewById(R.id.transactionButton)
+        val userButton: ImageButton = findViewById(R.id.userButton)
+        scannerButton.setOnClickListener {
+            startActivity(Intent(this, QrScanner::class.java))
+        }
+        /*transaction page*/
+        transactionButton.setOnClickListener {
+            startActivity(Intent(this, QrScanner::class.java))
+        }
+        /*user account page*/
+        userButton.setOnClickListener {
+            startActivity(Intent(this, QrScanner::class.java))
+        }
 
         setupScanner()
         checkPermission(android.Manifest.permission.CAMERA, 13)

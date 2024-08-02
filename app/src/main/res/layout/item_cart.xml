@@ -9,14 +9,14 @@
     <ImageButton
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete"
+        android:layout_height="65dp"
+        android:layout_marginEnd="8dp"
         android:contentDescription="@string/delete_item"
         android:padding="8dp"
-        android:layout_marginEnd="8dp"/>
+        android:src="@drawable/ic_delete" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="219dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
@@ -54,11 +54,12 @@
 
         <Button
             android:id="@+id/button_minus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textSize="18sp"
-            android:padding="12dp" /> <!-- Added padding to increase touch target size -->
+            android:layout_width="49dp"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:text="–"
+            android:textColor="@color/black"
+            android:textSize="18sp" /> <!-- Added padding to increase touch target size -->
 
         <TextView
             android:id="@+id/textViewQuantityControl"
@@ -71,10 +72,11 @@
 
         <Button
             android:id="@+id/button_plus"
-            android:layout_width="wrap_content"
+            android:layout_width="49dp"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:text="+"
-            android:textSize="18sp"
-            android:padding="12dp" /> <!-- Added padding to increase touch target size -->
+            android:textColor="@color/black"
+            android:textSize="18sp" /> <!-- Added padding to increase touch target size -->
     </LinearLayout>
 </LinearLayout>

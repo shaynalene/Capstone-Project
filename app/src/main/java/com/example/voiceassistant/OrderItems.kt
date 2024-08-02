@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.voiceassistant.GcashPage.Payment
+import com.example.voiceassistant.LoginActivity.Companion.randomCode
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
@@ -24,6 +26,7 @@ class OrderItems : AppCompatActivity() {
     private lateinit var orderAdapter: OrderItemsAdapter
     private lateinit var totalAmountTextView: TextView
     private lateinit var username: TextView
+    private lateinit var paymentStatusView: TextView
     private var order_id: String? = null
 
     private val supabase = createSupabaseClient(
@@ -55,6 +58,7 @@ class OrderItems : AppCompatActivity() {
         recyclerView = findViewById(R.id.orderItems)
         totalAmountTextView = findViewById(R.id.totalAmount)
         username = findViewById(R.id.userName)
+        paymentStatusView = findViewById(R.id.paymentStatusView)
         val btnGoBack: Button = findViewById(R.id.buttonGoBack)
         val btnConfirmOrder: Button = findViewById(R.id.orderComplete)
 
@@ -69,8 +73,29 @@ class OrderItems : AppCompatActivity() {
         }
 
         btnConfirmOrder.setOnClickListener {
-            startActivity(Intent(this, QrScanner::class.java))
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val orderId = order_id ?: return@launch // Ensure order_id is not null
+
+                    // Update payment status
+                    val response = supabase.postgrest.from("cart").update(mapOf("payment_status" to "Paid: Cash")) {
+                        filter {
+                            eq("order_id", orderId)
+                        }
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        // Log success and navigate to the next activity
+                        Log.d("Order Complete", "Payment status updated: $response")
+                        startActivity(Intent(this@OrderItems, QrScanner::class.java))
+                    }
+                } catch (e: Exception) {
+                    // Handle exception (e.g., show user feedback)
+                    Log.e("OrderItems", "Error updating payment status", e)
+                }
+            }
         }
+
 
         // Set the username TextView with order ID
         username.text = order_id
@@ -90,9 +115,12 @@ class OrderItems : AppCompatActivity() {
                 val items = result.decodeList<CartItem>()
                 val totalAmount = items.sumOf { it.price * it.quantity }
 
+                val paymentStatuses = items.map { it.paymentStatus }.distinct().joinToString(", ")
+
                 withContext(Dispatchers.Main) {
                     orderAdapter.updateItems(items)
                     totalAmountTextView.text = String.format("Total Amount: $%.2f", totalAmount)
+                    paymentStatusView.text = paymentStatuses
                 }
             } catch (e: Exception) {
                 Log.e("OrderItems", "Error loading cart items", e)

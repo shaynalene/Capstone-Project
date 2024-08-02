@@ -30,4 +30,11 @@
         <item name="itemHorizontalTranslationEnabled">false</item>
     </style>
 
+    <style name="CustomAlertDialog">
+        <item name="android:background">@color/mcdo</item> <!-- Yellow background -->
+        <item name="android:textColorPrimary">@color/black</item> <!-- Black text color -->
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+    </style>
+
 </resources>

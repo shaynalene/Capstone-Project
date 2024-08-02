@@ -38,6 +38,11 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import java.util.UUID
+import android.app.AlertDialog
+import android.os.Handler
+import android.os.Looper
+import android.view.Gravity
+import android.view.WindowManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -293,6 +298,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addToCart(menuItem: MenuItem) {
+        showAlertDialog(this@MainActivity, "Item Added to Cart!", "Mcdonalds app notification")
+
         val uuid = LoginActivity.UserData.uuid
         val uuid3 = extractUUID(uuid)
         Log.d(TAG, "$uuid3")
@@ -326,6 +333,39 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun showAlertDialog(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+        builder.setTitle(title)
+        builder.setMessage(message)
+
+
+        val dialog = builder.create()
+        dialog.show()
+
+        // Position the dialog at the top of the screen
+        val window = dialog.window
+        window?.let {
+            val layoutParams = WindowManager.LayoutParams().apply {
+                copyFrom(it.attributes)
+                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                y = 150 // Adjust this value to position the dialog vertically
+                width = 650
+                height = 400
+            }
+            it.attributes = layoutParams
+        }
+
+        // Automatically dismiss the dialog after less than 1 second
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+        }, 820) // 820 milliseconds delay
+    }
+
+
+
 
     fun extractUUID(input: String): String? {
         // Define the regex pattern for UUID

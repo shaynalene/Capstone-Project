@@ -8,6 +8,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -24,7 +26,7 @@ import javax.mail.*
 import javax.mail.internet.*
 
 class ForgotPasswordActivity : AppCompatActivity() {
-    private lateinit var etEmail: EditText
+    private lateinit var etEmail: TextInputEditText
     private lateinit var btnResetPassword: Button
 
     private val supabase: SupabaseClient = createSupabaseClient(
@@ -38,6 +40,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
+        // Correctly access the TextInputEditText directly
         etEmail = findViewById(R.id.etForgotEmail)
         btnResetPassword = findViewById(R.id.btnResetPassword)
 
@@ -46,9 +49,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 if (checkIfEmailExists(email)) {
                     if (generateResetCode(email)) {
-                        // Handle successful token generation
                         Toast.makeText(this@ForgotPasswordActivity, "Password reset email sent!", Toast.LENGTH_SHORT).show()
-                        finish() // Close the activity
+                        finish()
                     } else {
                         Toast.makeText(this@ForgotPasswordActivity, "Error sending password reset email", Toast.LENGTH_SHORT).show()
                     }
@@ -58,6 +60,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private suspend fun checkIfEmailExists(email: String): Boolean {
         return try {
@@ -131,7 +134,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
             val session = Session.getInstance(properties, object : Authenticator() {
                 override fun getPasswordAuthentication(): PasswordAuthentication {
-                    return PasswordAuthentication("apikey", "_PLACE_API_KEY_HERE_") // CHANGE THE PASSWORD WITH THE API KEY
+                    return PasswordAuthentication("apikey", "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") // CHANGE THE PASSWORD WITH THE API KEY
                 }
             })
 
@@ -140,7 +143,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 message.setFrom(InternetAddress("shaynalene.pabalate@adamson.edu.ph"))
                 message.addRecipient(MimeMessage.RecipientType.TO, InternetAddress(email))
                 message.subject = "Your Password Reset Code"
-                message.setText("Thank you for choosing Mcdo!" +
+                message.setText("Thank you for choosing Mcdo! " +
                         "Your password reset code is: $resetCode")
 
                 Transport.send(message)

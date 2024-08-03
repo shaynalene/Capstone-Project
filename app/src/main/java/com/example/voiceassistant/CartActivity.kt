@@ -86,9 +86,12 @@ class CartActivity : AppCompatActivity() {
                     .map { (key, groupedItems) ->
                         val totalQuantity = groupedItems.sumOf { it.quantity }
                         val firstItem = groupedItems.first()
-                        firstItem.copy(quantity = totalQuantity, price = totalQuantity * firstItem.price)
+                        // Adjusting the price for totalQuantity
+                        val totalPrice = totalQuantity * firstItem.price
+                        firstItem.copy(quantity = totalQuantity, price = totalPrice)
                     }
 
+                // Correctly calculate the total amount
                 val totalAmount = aggregatedItems.sumOf { it.price }
 
                 withContext(Dispatchers.Main) {

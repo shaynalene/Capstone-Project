@@ -67,6 +67,35 @@ class CartActivity : AppCompatActivity() {
         }
 
         loadCartItems()
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_home -> {
+                    // Handle Home navigation
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.action_search -> {
+                    // Handle Search navigation
+                    true
+                }
+                R.id.action_cart -> {
+                    // Navigate to CartActivity
+                    true
+                }
+                R.id.action_profile -> {
+                    // Handle Profile navigation
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USER_ID", "some-user-id")
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun loadCartItems() {

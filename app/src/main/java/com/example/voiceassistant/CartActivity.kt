@@ -86,13 +86,13 @@ class CartActivity : AppCompatActivity() {
                     .map { (key, groupedItems) ->
                         val totalQuantity = groupedItems.sumOf { it.quantity }
                         val firstItem = groupedItems.first()
-                        // Adjusting the price for totalQuantity
-                        val totalPrice = totalQuantity * firstItem.price
-                        firstItem.copy(quantity = totalQuantity, price = totalPrice)
+                        val unitPrice = firstItem.price
+                        val totalPrice = totalQuantity * unitPrice  // Total price for the aggregated quantity
+                        firstItem.copy(quantity = totalQuantity, price = unitPrice)  // Keep price as unit price for display
                     }
 
-                // Correctly calculate the total amount
-                val totalAmount = aggregatedItems.sumOf { it.price }
+                // Correctly calculate the total amount based on quantity and unit price
+                val totalAmount = aggregatedItems.sumOf { it.quantity * it.price }
 
                 withContext(Dispatchers.Main) {
                     cartAdapter.updateItems(aggregatedItems)
@@ -103,6 +103,7 @@ class CartActivity : AppCompatActivity() {
             }
         }
     }
+
 
 
     private fun deleteItem(cartItem: CartItem) {

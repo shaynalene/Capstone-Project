@@ -98,32 +98,6 @@ class AdminProfile : AppCompatActivity() {
             loadUserProfile(userId2)
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-
-        bottomNavigationView.selectedItemId = R.id.action_profile
-
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_home -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    true
-                }
-                R.id.action_search -> {
-                    // Handle Search navigation
-                    true
-                }
-                R.id.action_cart -> {
-                    startActivity(Intent(this, CartActivity::class.java))
-                    true
-                }
-                R.id.action_profile -> {
-                    // Already on Profile, no action needed
-                    true
-                }
-                else -> false
-            }
-        }
-
         btnEdit1.setOnClickListener {
             // Toggle editable state
             toggleEditable()

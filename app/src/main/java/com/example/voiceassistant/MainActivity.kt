@@ -251,7 +251,8 @@ class MainActivity : AppCompatActivity() {
         } else if (normalizedCommand.contains("recommend", ignoreCase = true) ||
             normalizedCommand.contains("want", ignoreCase = true) ||
             normalizedCommand.contains("give", ignoreCase = true) ||
-            normalizedCommand.contains("suggest", ignoreCase = true)) {
+            normalizedCommand.contains("suggest", ignoreCase = true)||
+            normalizedCommand.contains("mood", ignoreCase = true)) {
             Log.d(TAG, "Processing recommendation command")
             val (category, taste) = extractFeatures(normalizedCommand)
             Log.d(TAG, "Extracted category: $category, taste: $taste")
@@ -313,8 +314,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun addToCart(menuItem: MenuItem) {
-        showAlertDialog(this@MainActivity, "Item Added to Cart!", "Mcdonalds app notification")
+        showAlertDialog(this@MainActivity, "Item Added to Cart!", "McDonalds App Notification")
 
         val uuid = LoginActivity.UserData.uuid
         val uuid3 = extractUUID(uuid)

@@ -97,10 +97,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         //btnViewCart = findViewById(R.id.btnViewCart) // Initialize the button
 
-        // Initialize RecyclerView
-        //recyclerView.layoutManager = LinearLayoutManager(this)
-        //recyclerView.layoutManager = GridLayoutManager(this, 2)
-
         // Initialize RecyclerView with an empty list
         menuAdapter = MenuAdapter(emptyList()) { menuItem ->
             addToCart(menuItem)
@@ -328,8 +324,6 @@ class MainActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // val userId = "some_user_id" // Ensure this is valid
-
                 val cartItem = CartItem(
                     user_id = uuid2,
                     order_id = randomCode,
@@ -384,9 +378,6 @@ class MainActivity : AppCompatActivity() {
         }, 820) // 820 milliseconds delay
     }
 
-
-
-
     fun extractUUID(input: String): String? {
         // Define the regex pattern for UUID
         val regex = """([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})""".toRegex()
@@ -433,36 +424,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    private fun loadMenuItems(context: Context): List<MenuItem> {
-        val inputStream = context.assets.open("mcdelivery_menu.csv")
-        val reader = InputStreamReader(inputStream)
-        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
-
-        // Log headers
-        val headers = csvParser.headerMap.keys
-        Log.d(TAG, "CSV Headers: $headers")
-
-        val menuItems = mutableListOf<MenuItem>()
-
-        for (record in csvParser) {
-            val foodName = record.get("food_name")
-            val category = record.get("category")
-            val taste = record.get("taste")
-            val price = record.get("price").toDouble()
-
-            Log.d(TAG, "Loaded item: Name=$foodName, Category=$category, Taste=$taste, Price=$price")
-
-            menuItems.add(MenuItem(foodName, category, taste, price))
-        }
-
-        csvParser.close()
-        reader.close()
-
-        return menuItems
-    }
-    */
-
     private fun loadMenuItems() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -485,8 +446,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun recommendItems(items: List<MenuItem>, category: String?, taste: String?): List<MenuItem> {
         return if (category == null && taste == null) {

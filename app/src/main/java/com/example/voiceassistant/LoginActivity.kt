@@ -40,9 +40,8 @@ class LoginActivity : AppCompatActivity() {
         supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3aHV6Ynh6ZXhrbGR0dHh4ZWVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIzNDQ0OTUsImV4cCI6MjAzNzkyMDQ5NX0.vIlTT6qLZkwjd3FY0sCx8UKzkHlsxjPXykv5Xy63vQw"
     ) {
         install(Auth) {
-            alwaysAutoRefresh = false // default: true
-            autoLoadFromStorage = false // default: true
-            // and more...
+            alwaysAutoRefresh = false
+            autoLoadFromStorage = false
         }
         install(Postgrest)
     }
@@ -96,8 +95,6 @@ class LoginActivity : AppCompatActivity() {
             // Fetch user data from accounts_list table using the filter method
             val response = supabase.postgrest.from("accounts_list").select(columns = Columns.list("username")){
                 filter {
-                    //UserItem::userName eq username
-                    //or
                     eq("username", username)
                 }
             }
@@ -107,14 +104,12 @@ class LoginActivity : AppCompatActivity() {
             //USERDATA3: UUID
 
             // Process the fetched user data
-            val userData = response.data // This contains the user data from accounts_list
+            val userData = response.data
             Log.d("LoginActivity", "User data: $userData")
 
             // Fetch user data from accounts_list table using the filter method
             val response2 = supabase.postgrest.from("accounts_list").select(columns = Columns.list("password")){
                 filter {
-                    //UserItem::userName eq username
-                    //or
                     eq("username", username)
                     eq("password", password)
                 }
@@ -129,8 +124,6 @@ class LoginActivity : AppCompatActivity() {
                 // Fetch user data from accounts_list table using the filter method
                 val response3 = supabase.postgrest.from("accounts_list").select(columns = Columns.list("id")){
                     filter {
-                        //UserItem::userName eq username
-                        //or
                         eq("username", username)
                     }
                 }

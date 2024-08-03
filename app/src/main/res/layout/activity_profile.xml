@@ -164,7 +164,7 @@
         android:id="@+id/bottomNavigation"
         style="@style/CustomBottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="50dp"
         android:background="@color/mcdo"
         app:itemIconTint="@color/colorActive"
         app:itemTextColor="@color/colorActive"

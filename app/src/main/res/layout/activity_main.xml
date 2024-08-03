@@ -29,8 +29,8 @@
 
         <TextView
             android:id="@+id/tvSpeechInput"
-            android:layout_width="267dp"
-            android:layout_height="22dp"
+            android:layout_width="228dp"
+            android:layout_height="27dp"
             android:layout_marginEnd="8dp"
             android:text="Listening..."
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,18 +40,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.789" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSpeak"
-            android:layout_width="91dp"
-            android:layout_height="41dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/button_background"
-            android:text="Speak"
+            android:text="SPEAK"
             android:textColor="@android:color/black"
+            android:backgroundTint="@color/mcdo"
+            app:icon="@drawable/ic_mic"
+            app:iconSize="20dp"
+            app:iconTint="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -90,13 +94,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         style="@style/CustomBottomNavigationView"
-        android:layout_width="407dp"
-        android:layout_height="65dp"
+        android:layout_width="411dp"
+        android:layout_height="50dp"
         android:background="@color/mcdo"
+        app:elevation="0dp"
         app:itemIconTint="@color/colorActive"
         app:itemTextColor="@color/colorActive"
         app:layout_collapseMode="pin"
-        app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

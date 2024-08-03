@@ -90,10 +90,6 @@ class ProfileActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }
-                R.id.action_search -> {
-                    // Handle Search navigation
-                    true
-                }
                 R.id.action_cart -> {
                     startActivity(Intent(this, CartActivity::class.java))
                     true

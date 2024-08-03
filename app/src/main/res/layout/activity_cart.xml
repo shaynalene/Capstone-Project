@@ -63,9 +63,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGoBack"
-            android:layout_width="232dp"
+            android:layout_width="0dp"
             android:layout_height="37dp"
             android:layout_marginTop="8dp"
             android:text="Go Back"
@@ -74,18 +74,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnConfirmOrder"
-            app:layout_constraintWidth_percent="0.8" />
+            app:layout_constraintWidth_percent="0.8"
+            app:cornerRadius="8dp"
+        />
 
-        <Button
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConfirmOrder"
-            android:layout_width="232dp"
+            android:layout_width="0dp"
             android:layout_height="37dp"
             android:text="Confirm Order"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.8" />
+            app:layout_constraintWidth_percent="0.8"
+            app:cornerRadius="8dp"
+        />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,7 +99,7 @@
         android:id="@+id/bottomNavigation"
         style="@style/CustomBottomNavigationView"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="50dp"
         android:background="@color/mcdo"
         app:itemIconTint="@color/colorActive"
         app:itemTextColor="@color/colorActive"

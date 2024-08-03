@@ -135,10 +135,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.action_search -> {
-                    // Handle Search navigation
-                    true
-                }
                 R.id.action_cart -> {
                     // Navigate to CartActivity
                     val intent = Intent(this, CartActivity::class.java)

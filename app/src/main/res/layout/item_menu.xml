@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -39,16 +40,22 @@
         android:textStyle="bold"
         android:textSize="16sp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_add_to_cart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/mcdo"
-        android:textColor="@android:color/black"
-        android:padding="10dp"
-        android:text="Add to Cart"
-        android:layout_marginTop="8dp" />
+        android:backgroundTint="@color/mcdo"
+    android:textColor="@android:color/black"
+    android:padding="10dp"
+    android:text="Add to Cart"
+    android:layout_marginTop="8dp"
+    app:cornerRadius="8dp"
+    app:icon="@drawable/ic_add_shopping_cart"
+    app:iconTint="@android:color/black"
+    app:iconPadding="8dp"
+    />
+
 
 
 </LinearLayout>

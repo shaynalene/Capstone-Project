@@ -31,7 +31,8 @@ class LoginActivity : AppCompatActivity() {
     data class UserItem(
         @SerialName("username") val userName: String,
         @SerialName("password") val password: String,
-        @SerialName("id") val id: String
+        @SerialName("id") val id: String,
+        @SerialName("user_type") val userType: String
     )
 
     // Define the Supabase client
@@ -135,9 +136,28 @@ class LoginActivity : AppCompatActivity() {
                 UserData.uuid = userData3
 
                 // Proceed with successful data fetch
-                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+
+                var user_type = supabase.postgrest.from("accounts_list")
+                    .select(columns = Columns.list("user_type")) {
+                        filter {
+                            eq("username", username)
+                        }
+                    }
+
+                val inputUT = user_type.data
+                val regex3 = """"user_type":"(.*?)"""".toRegex()
+                val matchResult3 = regex3.find(inputUT)
+                val userType = matchResult3?.groupValues?.get(1)
+
+                if (userType == "user") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                } else if (userType == "admin") {
+                    val intent = Intent(this, QrScanner::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, user_type.toString(), Toast.LENGTH_SHORT).show()
+                }
             }
             else{
                 Toast.makeText(this, "Incorrect credentials.", Toast.LENGTH_SHORT).show()

@@ -39,7 +39,7 @@ class QrScanner : AppCompatActivity() {
         }
         /*user account page*/
         userButton.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, AdminProfile::class.java))
         }
 
         setupScanner()

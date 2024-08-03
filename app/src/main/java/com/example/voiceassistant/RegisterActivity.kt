@@ -50,7 +50,8 @@ class RegisterActivity : AppCompatActivity() {
         @SerialName("lastname") val lastName: String,
         @SerialName("birthday") val birthDate: String,
         @SerialName("contact_number") val contactNumber: String,
-        @SerialName("email") val emailAddress: String
+        @SerialName("email") val emailAddress: String,
+        @SerialName("user_type") val userType: String
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,7 +126,8 @@ class RegisterActivity : AppCompatActivity() {
                                     lastName = lastName,
                                     birthDate = birthDate,
                                     contactNumber = contactNumber,
-                                    emailAddress = emailAddress
+                                    emailAddress = emailAddress,
+                                    userType = "user"
                                 )
                             )
                         }

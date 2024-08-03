@@ -26,6 +26,7 @@ class TransactionAdapter(
         holder.paymentTransactionView.text = item.paymentStatus
 
         holder.viewButton.setOnClickListener {
+            holder.claimStatus.text = "Claimed"
             onViewButtonClick(item)
         }
     }
@@ -43,6 +44,7 @@ class TransactionAdapter(
         val orderIdTransactionView: TextView = itemView.findViewById(R.id.orderIdTransaction)
         val totalTransactionView: TextView = itemView.findViewById(R.id.totalTransaction)
         val paymentTransactionView: TextView = itemView.findViewById(R.id.paymentTransaction)
+        val claimStatus: TextView = itemView.findViewById(R.id.claimStatus)
         val viewButton: Button = itemView.findViewById(R.id.viewButton) // Assuming this is your "View" button
     }
 }

@@ -71,7 +71,7 @@ class TransactionPage : AppCompatActivity() {
             // No action needed as this is the current activity
         }
         findViewById<ImageButton>(R.id.userButton).setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, AdminProfile::class.java))
         }
     }
 

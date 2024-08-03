@@ -34,6 +34,13 @@
             android:layout_height="wrap_content"
             android:text="Payment Status"
             android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/claimStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pending"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <!-- Quantity Controls -->
@@ -47,6 +54,7 @@
             android:id="@+id/viewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:padding="12dp"
             android:text="View"
             android:textSize="18sp" /> <!-- Added padding to increase touch target size -->

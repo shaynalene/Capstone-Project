@@ -168,7 +168,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/mcdo"
+        app:itemIconTint="@color/colorActive"
+        app:itemTextColor="@color/colorActive">
 
         <!-- Centering and justifying ImageButtons -->
         <ImageButton
@@ -177,6 +180,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_home"
+            app:tint="@color/colorActive"
             android:contentDescription="Scanner Button"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
@@ -192,6 +196,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/baseline_receipt_24"
+            app:tint="@color/colorActive"
             android:contentDescription="Transaction Button"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
@@ -207,6 +212,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_profile"
+            app:tint="@color/colorActive"
             android:contentDescription="User Button"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"

@@ -75,6 +75,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             val matchResult = regex.find(existingemail)
             val etdexistingemail = matchResult?.groupValues?.get(1)
 
+
             if(etdexistingemail == email) {
                 return true
             }

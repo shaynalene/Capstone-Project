@@ -2,47 +2,65 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#f7f2eb">
 
-    <!-- Scanner View -->
+    <!-- Bottom Bar -->
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:text="Order QR Scanner"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/scanner_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:autoFocusButtonColor="@android:color/white"
+        android:layout_width="379dp"
+        android:layout_height="590dp"
+        app:autoFocusButtonColor="@color/colorActive"
         app:autoFocusButtonVisible="true"
-        app:flashButtonColor="@android:color/white"
+        app:flashButtonColor="@color/colorActive"
         app:flashButtonVisible="true"
         app:frameAspectRatioHeight="1"
         app:frameAspectRatioWidth="1"
-        app:frameColor="@android:color/white"
+        app:frameColor="@color/mcdo"
         app:frameCornersRadius="15dp"
         app:frameCornersSize="50dp"
         app:frameSize="0.75"
         app:frameThickness="5dp"
         app:frameVerticalBias="0.2"
-        app:maskColor="#ffbc0d">
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:maskColor="#f7f2eb">
 
         <TextView
             android:id="@+id/showResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
             android:layout_marginTop="30dp"
-            android:textSize="25sp"
+            android:layout_marginRight="15dp"
             android:gravity="center"
             android:text="Focus on the QR Code"
+            android:textColor="#A0A0A0"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@android:color/holo_red_dark" />
+            />
     </com.budiyev.android.codescanner.CodeScannerView>
 
-    <!-- Bottom Bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_bar"
         android:layout_width="0dp"
@@ -50,7 +68,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/mcdo"
+        app:tint="@color/colorActive"
+        app:itemIconTint="@color/colorActive"
+        app:itemTextColor="@color/colorActive">
 
         <!-- Centering and justifying ImageButtons -->
         <ImageButton
@@ -59,6 +81,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_home"
+            app:tint="@color/colorActive"
             android:contentDescription="Scanner Button"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
@@ -73,6 +96,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="8dp"
+            app:tint="@color/colorActive"
             android:src="@drawable/baseline_receipt_24"
             android:contentDescription="Transaction Button"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -89,6 +113,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_profile"
+            app:tint="@color/colorActive"
             android:contentDescription="User Button"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"

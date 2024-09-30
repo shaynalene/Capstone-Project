@@ -316,7 +316,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun addToCart(menuItem: MenuItem) {
-        showAlertDialog(this@MainActivity, "Item Added to Cart!", "McDonalds App Notification")
+        showAlertDialog(this@MainActivity, "Item Added to Cart", "Successfully added.")
 
         val uuid = LoginActivity.UserData.uuid
         val uuid3 = extractUUID(uuid)

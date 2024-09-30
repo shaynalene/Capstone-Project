@@ -55,16 +55,24 @@
         android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/mcdo"
+        app:itemIconTint="@color/colorActive"
+        app:itemTextColor="@color/colorActive">
+
 
         <ImageButton
             android:id="@+id/scannerButton"
+            style="@style/CustomBottomNavigationView"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="8dp"
+            android:background="@color/mcdo"
+            app:tint="@color/colorActive"
+            app:itemIconTint="@color/colorActive"
+            app:itemTextColor="@color/colorActive"
             android:src="@drawable/ic_home"
             android:contentDescription="Scanner Button"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
             android:scaleType="centerInside"
             app:layout_constraintTop_toTopOf="parent"
@@ -77,6 +85,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="8dp"
+            app:tint="@color/colorActive"
             android:src="@drawable/baseline_receipt_24"
             android:contentDescription="Transaction Button"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -92,6 +101,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="8dp"
+            app:tint="@color/colorActive"
             android:src="@drawable/ic_profile"
             android:contentDescription="User Button"
             android:background="?attr/selectableItemBackgroundBorderless"
